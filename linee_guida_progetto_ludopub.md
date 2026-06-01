@@ -62,7 +62,7 @@ Il sistema distingue quindi tra tre livelli di accesso:
 
 ## 3. Entità principali
 
-Il progetto deve contenere almeno 5-6 entità. Per rendere il dominio abbastanza ricco, si propone il seguente modello.
+Il progetto deve contenere almeno 5-6 entità. Il modello attualmente implementato contiene le sei entità principali del dominio, con alcune semplificazioni rispetto alla proposta iniziale.
 
 ---
 
@@ -111,13 +111,12 @@ Rappresenta un tavolo fisico del ludopub.
 - capienza
 - posizione
 - disponibile
+- attivo
 
-### Esempi di posizione
+### Valori di posizione nel modello attuale
 
-- sala principale;
-- veranda;
-- area giochi;
-- sala privata.
+- `INTERNO`
+- `ESTERNO`
 
 ### Relazioni
 
@@ -199,14 +198,7 @@ Rappresenta la prenotazione di un tavolo da parte di un utente.
 - oraInizio
 - oraFine
 - numeroPersone
-- stato
 - note
-
-### Possibili valori di stato
-
-- `CONFERMATA`
-- `ANNULLATA`
-- `COMPLETATA`
 
 ### Relazioni
 
@@ -224,11 +216,13 @@ Tavolo 1 --- N Prenotazione
 
 ### Regola di business importante
 
-Non devono esistere due prenotazioni confermate per lo stesso tavolo nella stessa fascia oraria.
+Non devono esistere due prenotazioni per lo stesso tavolo nella stessa fascia oraria.
 
 In altre parole, se un tavolo è già prenotato dalle 20:00 alle 22:00, un altro utente non deve poter prenotare lo stesso tavolo dalle 21:00 alle 23:00.
 
 Questa è una delle regole più importanti del progetto, perché permette di dimostrare vera logica applicativa nel service layer.
+
+Nota sul modello attuale: `Prenotazione` non contiene un campo `stato`. Se in futuro si vuole mantenere lo storico delle prenotazioni annullate o completate, si può reintrodurre uno stato dedicato.
 
 ---
 
@@ -290,15 +284,7 @@ Questa entità è preferibile rispetto a una relazione many-to-many diretta tra 
 
 - id
 - dataIscrizione
-- stato
-- numeroPartecipanti
 - note
-
-### Possibili valori di stato
-
-- `ISCRITTO`
-- `ANNULLATO`
-- `PRESENTE`
 
 ### Relazioni
 
@@ -317,6 +303,8 @@ Evento 1 --- N IscrizioneEvento
 Un utente non deve potersi iscrivere due volte allo stesso evento.
 
 Inoltre, il sistema deve impedire nuove iscrizioni se l'evento ha già raggiunto il numero massimo di partecipanti.
+
+Nota sul modello attuale: `IscrizioneEvento` non contiene un campo `stato` e non contiene `numeroPartecipanti`; ogni iscrizione rappresenta quindi la partecipazione di un utente a un evento.
 
 ---
 
@@ -498,7 +486,7 @@ Il sistema deve controllare che:
 1. il tavolo esista;
 2. il tavolo sia disponibile;
 3. la capienza del tavolo sia sufficiente;
-4. non esista già una prenotazione confermata sovrapposta nello stesso intervallo orario;
+4. non esista già una prenotazione sovrapposta nello stesso intervallo orario;
 5. l'orario di fine sia successivo all'orario di inizio.
 
 Tipo di operazione:
@@ -534,8 +522,8 @@ Campi modificabili:
 Il sistema deve controllare che:
 
 1. la prenotazione appartenga all'utente autenticato;
-2. la prenotazione non sia già annullata o completata;
-3. la nuova fascia oraria non si sovrapponga con altre prenotazioni confermate dello stesso tavolo;
+2. la prenotazione sia futura;
+3. la nuova fascia oraria non si sovrapponga con altre prenotazioni dello stesso tavolo;
 4. il numero di persone sia compatibile con la capienza del tavolo.
 
 Tipo di operazione:
@@ -558,18 +546,12 @@ Tavolo
 
 L'utente registrato può annullare una propria prenotazione futura.
 
-Invece di eliminare fisicamente la prenotazione dal database, è consigliabile impostare lo stato a:
-
-```text
-ANNULLATA
-```
-
-Questo permette di mantenere lo storico.
+Nel modello attuale `Prenotazione` non ha un campo `stato`, quindi l'annullamento può essere gestito eliminando la prenotazione. Se si vuole mantenere lo storico, sarà possibile aggiungere in seguito uno stato dedicato.
 
 Tipo di operazione:
 
 ```text
-Aggiornamento o cancellazione logica
+Cancellazione o futura cancellazione logica
 ```
 
 Entità coinvolte:
@@ -591,7 +573,7 @@ Il sistema deve controllare che:
 2. l'evento sia in stato `APERTO`;
 3. l'evento non sia già pieno;
 4. l'utente non sia già iscritto allo stesso evento;
-5. il numero di partecipanti richiesto sia compatibile con i posti disponibili.
+5. il numero di iscrizioni già presenti sia inferiore ai posti disponibili.
 
 Tipo di operazione:
 
@@ -613,12 +595,12 @@ IscrizioneEvento
 
 L'utente registrato può annullare la propria iscrizione a un evento.
 
-Anche qui è preferibile modificare lo stato dell'iscrizione invece di eliminarla fisicamente.
+Nel modello attuale `IscrizioneEvento` non ha un campo `stato`, quindi l'annullamento può essere gestito eliminando l'iscrizione. Se si vuole mantenere lo storico, sarà possibile aggiungere in seguito uno stato dedicato.
 
 Tipo di operazione:
 
 ```text
-Aggiornamento
+Cancellazione o futura cancellazione logica
 ```
 
 Entità coinvolte:
@@ -849,7 +831,7 @@ Il progetto deve contenere regole applicative chiare.
 
 ## 7.1 Regola sulle prenotazioni sovrapposte
 
-Un tavolo non può avere due prenotazioni confermate nella stessa fascia oraria.
+Un tavolo non può avere due prenotazioni nella stessa fascia oraria.
 
 Due intervalli si sovrappongono se:
 
@@ -871,17 +853,13 @@ Il numero di persone della prenotazione deve essere minore o uguale alla capienz
 
 Un utente non può iscriversi a un evento se il numero massimo di partecipanti è stato raggiunto.
 
-Il sistema deve considerare solo le iscrizioni attive, cioè quelle in stato:
-
-```text
-ISCRITTO
-```
+Nel modello attuale `IscrizioneEvento` non ha un campo `stato`, quindi il conteggio considera le iscrizioni presenti per l'evento.
 
 ---
 
 ## 7.4 Regola sulla doppia iscrizione
 
-Lo stesso utente non può avere due iscrizioni attive allo stesso evento.
+Lo stesso utente non può avere due iscrizioni allo stesso evento.
 
 ---
 
