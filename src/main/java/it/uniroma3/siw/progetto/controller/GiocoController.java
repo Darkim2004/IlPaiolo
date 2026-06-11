@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import it.uniroma3.siw.progetto.model.Evento;
 import it.uniroma3.siw.progetto.model.Gioco;
 import it.uniroma3.siw.progetto.service.GiocoService;
 import jakarta.validation.Valid;
