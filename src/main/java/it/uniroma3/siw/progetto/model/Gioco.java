@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Gioco {
@@ -13,6 +14,7 @@ public class Gioco {
     private Long id;
 
     @Column(nullable = false)
+    @NotBlank(message = "Il titolo non può essere vuoto")
     private String titolo;
 
     @Column(length = 2000)
@@ -34,12 +36,7 @@ public class Gioco {
 
     private String immagineUrl;
 
-    @ManyToMany
-    @JoinTable(
-            name = "gioco_evento",
-            joinColumns = @JoinColumn(name = "gioco_id"),
-            inverseJoinColumns = @JoinColumn(name = "evento_id")
-    )
+    @ManyToMany(mappedBy = "giochi")
     private Set<Evento> eventi = new HashSet<>();
 
     public Gioco() {
