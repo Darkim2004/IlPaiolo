@@ -27,7 +27,7 @@ public class IscrizioneEventoService {
         this.utenteRepository = utenteRepository;
     }
     @Transactional
-    public void iscriviti(Long eventoId, String username) {
+    public void save(Long eventoId, String username) {
 
         Optional<Evento> eventoOptional = eventoRepository.findById(eventoId);
         if (eventoOptional.isEmpty()) {
@@ -56,6 +56,26 @@ public class IscrizioneEventoService {
 
         IscrizioneEvento iscrizione = new IscrizioneEvento(utente, evento);
         iscrizioneEventoRepository.save(iscrizione);
+    }
+    //ho eliminato l'iscrizione all'evento eliminando l'iscrizione perche per ora non abbiamo messo uno Stato, come c'è scritto nel caso d'uso
+    @Transactional
+    public void delete(Long eventoId, String username){
+        Optional<Evento> opt = eventoRepository.findById(eventoId);
+        if(opt.isEmpty()){
+            throw new IllegalArgumentException("Evento non trovato");
+        }
+        Optional<Utente> optUtente = utenteRepository.findByUsername(username);
+        if(optUtente.isEmpty()){
+            throw new IllegalArgumentException("Utente non trovato");
+        }
+        Evento evento = opt.get();
+        Utente utente = optUtente.get();
+        Optional<IscrizioneEvento> optIscrizione = iscrizioneEventoRepository.findByUtenteAndEvento(utente, evento);
+        if(optIscrizione.isEmpty()){
+            throw new IllegalArgumentException("Nessuna iscrizione all'evento");
+        }
+        IscrizioneEvento iscrizione = optIscrizione.get();
+        iscrizioneEventoRepository.delete(iscrizione);
     }
     
 }
