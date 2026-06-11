@@ -3,8 +3,8 @@
 
 # Suddivisione Compiti
 - Uc1, Uc2, Uc10 Andrea
-- UC3, UC4, Uc5, Uc6 Matteo
-- Uc7, Uc8, Uc9, Uc11, Uc12 Luigi
+- UC4, Uc5, Uc6, Uc9 Matteo
+- Uc3, Uc7, Uc8, Uc11, Uc12 Luigi
 
 ## 1. Obiettivo del progetto
 
