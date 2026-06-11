@@ -1,6 +1,11 @@
 # Linee guida progetto personale SIW  
 # Sistema informativo per la gestione di un Ludopub
 
+# Suddivisione Compiti
+- Uc1, Uc2, Uc10 Andrea
+- UC4, Uc5, Uc6, Uc9 Matteo
+- Uc7, Uc8, Uc11, Uc12 Luigi
+
 ## 1. Obiettivo del progetto
 
 Il progetto consiste nella realizzazione di un piccolo sistema informativo web per la gestione di un **ludopub**, cioè un locale in cui i clienti possono prenotare tavoli, consultare un catalogo di giochi da tavolo e partecipare a eventi ludici organizzati dal locale.
