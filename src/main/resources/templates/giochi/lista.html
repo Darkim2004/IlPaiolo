@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Giochi</title>
+</head>
+<body>
+
+<h1>Giochi</h1>
+
+<p>
+    <a th:href="@{/giochi/nuovo}">Aggiungi gioco</a>
+</p>
+
+<div th:if="${#lists.isEmpty(giochi)}">
+    <p>Nessun gioco disponibile al momento.</p>
+</div>
+
+<div th:each="gioco : ${giochi}">
+    <h2 th:text="${gioco.titolo}">Titolo gioco</h2>
+    <p th:if="${gioco.categoria != null}" th:text="${gioco.categoria}">Categoria</p>
+    <p>Stato: <span th:text="${gioco.stato}">DISPONIBILE</span></p>
+    <p th:if="${gioco.numeroMinGiocatori != null and gioco.numeroMaxGiocatori != null}">
+        Giocatori:
+        <span th:text="${gioco.numeroMinGiocatori}">1</span>
+        -
+        <span th:text="${gioco.numeroMaxGiocatori}">4</span>
+    </p>
+
+    <a th:href="@{/giochi/{id}(id=${gioco.id})}">Dettaglio</a>
+    <a th:href="@{/giochi/{id}/modifica(id=${gioco.id})}">Modifica</a>
+    <form th:action="@{/giochi/{id}/elimina(id=${gioco.id})}" method="post" style="display: inline;">
+        <button type="submit">Elimina</button>
+    </form>
+</div>
+
+<p>
+    <a th:href="@{/}">Torna alla home</a>
+</p>
+
+</body>
+</html>
