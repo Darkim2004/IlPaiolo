@@ -3,14 +3,8 @@ package it.uniroma3.siw.progetto.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Gioco {
@@ -20,6 +14,7 @@ public class Gioco {
     private Long id;
 
     @Column(nullable = false)
+    @NotBlank(message = "Il titolo non può essere vuoto")
     private String titolo;
 
     @Column(length = 2000)

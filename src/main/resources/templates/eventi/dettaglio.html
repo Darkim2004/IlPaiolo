@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${evento.nome}"></title>
+</head>
+<body>
+
+<h1 th:text="${evento.nome}"></h1>
+<p th:text="${evento.descrizione}"></p>
+<p th:text="${evento.data}"></p>
+<p th:text="${evento.oraInizio} + ' - ' + ${evento.oraFine}"></p>
+<p>Stato: <span th:text="${evento.stato}"></span></p>
+<p>Costo: <span th:text="${evento.costoPartecipazione != null ? evento.costoPartecipazione : 'Gratuito'}"></span></p>
+
+<h2>Giochi inclusi</h2>
+<ul>
+    <li th:each="gioco : ${evento.giochi}" th:text="${gioco.titolo}"></li>
+</ul>
+
+<p>Posti disponibili:
+    <span th:text="${evento.numeroMaxPartecipanti - evento.iscrizioni.size()}"></span>
+</p>
+
+<a href="/eventi">Torna alla lista</a>
+
+</body>
+</html>

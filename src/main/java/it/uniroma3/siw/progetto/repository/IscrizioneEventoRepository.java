@@ -3,8 +3,6 @@ package it.uniroma3.siw.progetto.repository;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
-
 import it.uniroma3.siw.progetto.model.Evento;
 import it.uniroma3.siw.progetto.model.IscrizioneEvento;
 import it.uniroma3.siw.progetto.model.Utente;

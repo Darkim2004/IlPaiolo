@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${gioco.id == null ? 'Nuovo gioco' : 'Modifica gioco'}">Form gioco</title>
+</head>
+<body>
+
+<h1 th:text="${gioco.id == null ? 'Nuovo gioco' : 'Modifica gioco'}">Form gioco</h1>
+
+<form th:action="${gioco.id == null ? '/giochi' : '/giochi/' + gioco.id}" th:object="${gioco}" method="post">
+    <input type="hidden" th:field="*{id}">
+
+    <div>
+        <label for="titolo">Titolo</label>
+        <input id="titolo" type="text" th:field="*{titolo}" required>
+        <span th:if="${#fields.hasErrors('titolo')}" th:errors="*{titolo}">Errore titolo</span>
+    </div>
+
+    <div>
+        <label for="descrizione">Descrizione</label>
+        <textarea id="descrizione" th:field="*{descrizione}"></textarea>
+        <span th:if="${#fields.hasErrors('descrizione')}" th:errors="*{descrizione}">Errore descrizione</span>
+    </div>
+
+    <div>
+        <label for="categoria">Categoria</label>
+        <input id="categoria" type="text" th:field="*{categoria}">
+        <span th:if="${#fields.hasErrors('categoria')}" th:errors="*{categoria}">Errore categoria</span>
+    </div>
+
+    <div>
+        <label for="numeroMinGiocatori">Numero minimo giocatori</label>
+        <input id="numeroMinGiocatori" type="number" min="1" th:field="*{numeroMinGiocatori}">
+        <span th:if="${#fields.hasErrors('numeroMinGiocatori')}" th:errors="*{numeroMinGiocatori}">Errore minimo giocatori</span>
+    </div>
+
+    <div>
+        <label for="numeroMaxGiocatori">Numero massimo giocatori</label>
+        <input id="numeroMaxGiocatori" type="number" min="1" th:field="*{numeroMaxGiocatori}">
+        <span th:if="${#fields.hasErrors('numeroMaxGiocatori')}" th:errors="*{numeroMaxGiocatori}">Errore massimo giocatori</span>
+    </div>
+
+    <div>
+        <label for="durataMediaMinuti">Durata media in minuti</label>
+        <input id="durataMediaMinuti" type="number" min="1" th:field="*{durataMediaMinuti}">
+        <span th:if="${#fields.hasErrors('durataMediaMinuti')}" th:errors="*{durataMediaMinuti}">Errore durata</span>
+    </div>
+
+    <div>
+        <label for="difficolta">Difficolta</label>
+        <input id="difficolta" type="text" th:field="*{difficolta}">
+        <span th:if="${#fields.hasErrors('difficolta')}" th:errors="*{difficolta}">Errore difficolta</span>
+    </div>
+
+    <div>
+        <label for="stato">Stato</label>
+        <select id="stato" th:field="*{stato}">
+            <option value="DISPONIBILE">Disponibile</option>
+            <option value="NON_DISPONIBILE">Non disponibile</option>
+            <option value="DANNEGGIATO">Danneggiato</option>
+            <option value="RISERVATO_EVENTO">Riservato evento</option>
+        </select>
+        <span th:if="${#fields.hasErrors('stato')}" th:errors="*{stato}">Errore stato</span>
+    </div>
+
+    <div>
+        <label for="immagineUrl">URL immagine</label>
+        <input id="immagineUrl" type="text" th:field="*{immagineUrl}">
+        <span th:if="${#fields.hasErrors('immagineUrl')}" th:errors="*{immagineUrl}">Errore immagine</span>
+    </div>
+
+    <button type="submit">Salva</button>
+    <a th:href="@{/giochi}">Annulla</a>
+</form>
+
+</body>
+</html>

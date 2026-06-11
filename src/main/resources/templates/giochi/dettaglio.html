@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${gioco.titolo}">Dettaglio gioco</title>
+</head>
+<body>
+
+<h1 th:text="${gioco.titolo}">Titolo gioco</h1>
+
+<img th:src="${gioco.immagineUrl != null and !#strings.isEmpty(gioco.immagineUrl) ? gioco.immagineUrl : '/images/IlPaiolo_logo.png'}"
+     th:alt="${gioco.titolo}"
+     style="max-width: 300px;">
+
+<p th:if="${gioco.descrizione != null}" th:text="${gioco.descrizione}">Descrizione</p>
+
+<p>Categoria: <span th:text="${gioco.categoria != null ? gioco.categoria : 'Non specificata'}">Categoria</span></p>
+<p>Difficolta: <span th:text="${gioco.difficolta != null ? gioco.difficolta : 'Non specificata'}">Difficolta</span></p>
+<p>Stato: <span th:text="${gioco.stato}">DISPONIBILE</span></p>
+
+<p th:if="${gioco.numeroMinGiocatori != null or gioco.numeroMaxGiocatori != null}">
+    Giocatori:
+    <span th:text="${gioco.numeroMinGiocatori != null ? gioco.numeroMinGiocatori : '?'}">1</span>
+    -
+    <span th:text="${gioco.numeroMaxGiocatori != null ? gioco.numeroMaxGiocatori : '?'}">4</span>
+</p>
+
+<p th:if="${gioco.durataMediaMinuti != null}">
+    Durata media:
+    <span th:text="${gioco.durataMediaMinuti}">60</span>
+    minuti
+</p>
+
+<h2>Eventi associati</h2>
+<div th:if="${#sets.isEmpty(gioco.eventi)}">
+    <p>Nessun evento associato.</p>
+</div>
+<ul th:if="${!#sets.isEmpty(gioco.eventi)}">
+    <li th:each="evento : ${gioco.eventi}">
+        <a th:href="@{/eventi/{id}(id=${evento.id})}" th:text="${evento.nome}">Evento</a>
+    </li>
+</ul>
+
+<p>
+    <a th:href="@{/giochi/{id}/modifica(id=${gioco.id})}">Modifica</a>
+</p>
+<form th:action="@{/giochi/{id}/elimina(id=${gioco.id})}" method="post">
+    <button type="submit">Elimina</button>
+</form>
+
+<p>
+    <a th:href="@{/giochi}">Torna alla lista</a>
+</p>
+
+</body>
+</html>

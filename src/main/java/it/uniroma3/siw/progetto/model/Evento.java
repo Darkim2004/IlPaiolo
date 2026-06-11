@@ -8,15 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 @Entity
 public class Evento {
@@ -52,7 +44,7 @@ public class Evento {
     @ManyToMany
     private Set<Gioco> giochi = new HashSet<>();
 
-    @OneToMany(mappedBy = "evento")
+    @OneToMany(mappedBy = "evento", fetch = FetchType.EAGER)
     private List<IscrizioneEvento> iscrizioni = new ArrayList<>();
 
     public Evento() {

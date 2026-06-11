@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Eventi</title>
+</head>
+<body>
+
+<h1>Eventi in programma</h1>
+
+<div th:if="${#lists.isEmpty(eventi)}">
+    <p>Nessun evento disponibile al momento.</p>
+</div>
+
+<div th:each="evento : ${eventi}">
+    <h2 th:text="${evento.nome}"></h2>
+    <p th:text="${evento.data}"></p>
+    <p th:text="${evento.oraInizio} + ' - ' + ${evento.oraFine}"></p>
+    <p>Posti disponibili:
+        <span th:text="${evento.numeroMaxPartecipanti - evento.iscrizioni.size()}"></span>
+    </p>
+    <a th:href="@{/eventi/{id}(id=${evento.id})}">Dettaglio</a>
+</div>
+
+</body>
+</html>
