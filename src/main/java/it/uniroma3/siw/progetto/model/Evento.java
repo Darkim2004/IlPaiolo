@@ -41,7 +41,7 @@ public class Evento {
 
     private BigDecimal costoPartecipazione;
 
-    @ManyToMany(mappedBy = "eventi")
+    @ManyToMany
     private Set<Gioco> giochi = new HashSet<>();
 
     @OneToMany(mappedBy = "evento", fetch = FetchType.EAGER)
