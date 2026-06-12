@@ -1,8 +1,10 @@
 package it.uniroma3.siw.progetto.controller;
 
 import it.uniroma3.siw.progetto.model.Evento;
+import it.uniroma3.siw.progetto.model.StatoEvento;
 import it.uniroma3.siw.progetto.service.EventoService;
 
+import it.uniroma3.siw.progetto.service.IscrizioneEventoService;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -18,10 +20,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class EventoController {
 
+    private final IscrizioneEventoService iscrizioneEventoService;
     private final EventoService eventoService;
 
-    public EventoController(EventoService eventoService) {
+    public EventoController(EventoService eventoService, IscrizioneEventoService iscrizioneEventoService) {
         this.eventoService = eventoService;
+        this.iscrizioneEventoService = iscrizioneEventoService;
     }
 
     @GetMapping("/eventi")
@@ -40,6 +44,26 @@ public class EventoController {
         eventoService.save(evento, giochiIds);
         return "redirect:/admin/eventi";
     }
+    @GetMapping("/admin/eventi/{id}/iscrizioni")
+    public String listaIscrizioni(@PathVariable Long id,Model model) {
+        model.addAttribute("evento",eventoService.getEventoById(id));
+        model.addAttribute("iscrizioni",iscrizioneEventoService.getIscrizioniByEvento(id));
+        return "admin/eventi/iscrizioni";
+    }
+    @PostMapping("/admin/eventi/{id}/stato")
+    public String cambiaStato(@PathVariable Long id,@RequestParam StatoEvento stato) {
+        eventoService.cambiaStato(id, stato);
+        return "redirect:/admin/eventi" + id + "/iscrizioni";
+    }
+
+    @PostMapping("/admin/iscrizioni/{id}/delete")
+    public String deleteIscrizione(@PathVariable Long id,@RequestParam Long eventoId) {
+        iscrizioneEventoService.deleteById(id);
+        return "redirect:/admin/eventi" + eventoId + "/iscrizioni";
+    }
+    
+    
+    
     
 
 }

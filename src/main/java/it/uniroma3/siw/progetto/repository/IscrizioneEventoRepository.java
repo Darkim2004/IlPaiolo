@@ -1,5 +1,6 @@
 package it.uniroma3.siw.progetto.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,4 +14,5 @@ public interface IscrizioneEventoRepository extends JpaRepository<IscrizioneEven
     boolean existsByUtenteAndEvento(Utente utente, Evento evento);
     int countByEvento(Evento evento);
     Optional<IscrizioneEvento> findByUtenteAndEvento(Utente utente, Evento evento);
+    List<IscrizioneEvento> findByEvento(Evento evento);
 }

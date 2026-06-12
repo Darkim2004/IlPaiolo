@@ -69,4 +69,14 @@ public class EventoService {
         evento.setGiochi(giochi);
         eventoRepository.save(evento);
     }
+    @Transactional
+    public void cambiaStato(Long eventoId, StatoEvento nuovoStato){
+        Optional<Evento> optEvento = eventoRepository.findById(eventoId);
+        if(optEvento.isEmpty()){
+            throw new IllegalArgumentException("Evento non trovato");
+        }
+        Evento evento = optEvento.get();
+        evento.setStato(nuovoStato);
+        eventoRepository.save(evento);
+    }
 }
