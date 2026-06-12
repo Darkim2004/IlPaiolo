@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrazione</title>
+</head>
+<body>
+
+<h1>Registrati</h1>
+
+<form th:action="@{/register}" th:object="${utente}" method="post">
+    <input th:replace="~{componenti :: csrfInput}">
+
+    <div>
+        <label for="nome">Nome</label>
+        <input id="nome" type="text" th:field="*{nome}" autocomplete="given-name">
+    </div>
+
+    <div>
+        <label for="cognome">Cognome</label>
+        <input id="cognome" type="text" th:field="*{cognome}" autocomplete="family-name">
+    </div>
+
+    <div>
+        <label for="email">Email</label>
+        <input id="email" type="email" th:field="*{email}" autocomplete="email" required>
+        <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email non valida</p>
+    </div>
+
+    <div>
+        <label for="password">Password</label>
+        <input id="password" type="password" th:field="*{password}" autocomplete="new-password" required>
+        <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password non valida</p>
+    </div>
+
+    <button type="submit">Crea account</button>
+</form>
+
+<p>
+    Hai gia un account?
+    <a th:href="@{/login}">Accedi</a>
+</p>
+
+<p>
+    <a th:href="@{/}">Torna alla home</a>
+</p>
+
+</body>
+</html>
