@@ -24,9 +24,6 @@ public class Utente {
     private String cognome;
 
     @Column(nullable = false, unique = true)
-    private String username;
-
-    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
@@ -45,10 +42,9 @@ public class Utente {
     public Utente() {
     }
 
-    public Utente(String nome, String cognome, String username, String email, String password, Ruolo ruolo) {
+    public Utente(String nome, String cognome, String email, String password, Ruolo ruolo) {
         this.nome = nome;
         this.cognome = cognome;
-        this.username = username;
         this.email = email;
         this.password = password;
         this.ruolo = ruolo;
@@ -76,14 +72,6 @@ public class Utente {
 
     public void setCognome(String cognome) {
         this.cognome = cognome;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getEmail() {

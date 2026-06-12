@@ -8,20 +8,20 @@
 
 <h1>Accedi</h1>
 
-<p th:if="${param.error}">Username o password non validi.</p>
+<p th:if="${param.error}">Email o password non validi.</p>
 <p th:if="${param.logout}">Logout effettuato con successo.</p>
 
 <form th:action="@{/perform-login}" method="post">
     <input th:replace="~{componenti :: csrfInput}">
 
     <div>
-        <label for="username">Username</label>
-        <input id="username" type="text" name="username" required>
+        <label for="email">Email</label>
+        <input id="email" type="email" name="email" autocomplete="email" required>
     </div>
 
     <div>
         <label for="password">Password</label>
-        <input id="password" type="password" name="password" required>
+        <input id="password" type="password" name="password" autocomplete="current-password" required>
     </div>
 
     <button type="submit">Accedi</button>

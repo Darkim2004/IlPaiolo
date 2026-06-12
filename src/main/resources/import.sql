@@ -1,6 +1,6 @@
-insert into utente (id, nome, cognome, username, email, password, ruolo) values (1, 'Admin', 'Test', 'admin', 'admin@ilpaiolo.test', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ADMIN');
-insert into utente (id, nome, cognome, username, email, password, ruolo) values (2, 'Mario', 'Rossi', 'mario', 'mario.rossi@ilpaiolo.test', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'USER');
-insert into utente (id, nome, cognome, username, email, password, ruolo) values (3, 'Giulia', 'Bianchi', 'giulia', 'giulia.bianchi@ilpaiolo.test', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'USER');
+insert into utente (id, nome, cognome, email, password, ruolo) values (1, 'Admin', 'Test', 'admin@ilpaiolo.test', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'ADMIN');
+insert into utente (id, nome, cognome, email, password, ruolo) values (2, 'Mario', 'Rossi', 'mario.rossi@ilpaiolo.test', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'USER');
+insert into utente (id, nome, cognome, email, password, ruolo) values (3, 'Giulia', 'Bianchi', 'giulia.bianchi@ilpaiolo.test', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'USER');
 
 insert into tavolo (id, numero, nome, capienza, posizione, disponibile, attivo) values (1, 1, 'Tavolo finestra', 4, 'INTERNO', true, true);
 insert into tavolo (id, numero, nome, capienza, posizione, disponibile, attivo) values (2, 2, 'Tavolo grande', 8, 'INTERNO', true, true);

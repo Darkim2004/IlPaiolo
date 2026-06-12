@@ -27,7 +27,7 @@ public class IscrizioneEventoService {
         this.utenteRepository = utenteRepository;
     }
     @Transactional
-    public void save(Long eventoId, String username) {
+    public void save(Long eventoId, String email) {
 
         Optional<Evento> eventoOptional = eventoRepository.findById(eventoId);
         if (eventoOptional.isEmpty()) {
@@ -35,11 +35,10 @@ public class IscrizioneEventoService {
         }
         Evento evento = eventoOptional.get();
 
-        Optional<Utente> utenteOptional = utenteRepository.findByUsername(username);
-        if (utenteOptional.isEmpty()) {
+        Utente utente = utenteRepository.findByEmail(email);
+        if (utente == null) {
             throw new IllegalArgumentException("Utente non trovato");
         }
-        Utente utente = utenteOptional.get();
 
         if (evento.getStato() != StatoEvento.APERTO) {
             throw new IllegalStateException("L'evento non è aperto alle iscrizioni");
@@ -59,17 +58,16 @@ public class IscrizioneEventoService {
     }
     //ho eliminato l'iscrizione all'evento eliminando l'iscrizione perche per ora non abbiamo messo uno Stato, come c'è scritto nel caso d'uso
     @Transactional
-    public void delete(Long eventoId, String username){
+    public void delete(Long eventoId, String email){
         Optional<Evento> opt = eventoRepository.findById(eventoId);
         if(opt.isEmpty()){
             throw new IllegalArgumentException("Evento non trovato");
         }
-        Optional<Utente> optUtente = utenteRepository.findByUsername(username);
-        if(optUtente.isEmpty()){
+        Utente utente = utenteRepository.findByEmail(email);
+        if(utente == null){
             throw new IllegalArgumentException("Utente non trovato");
         }
         Evento evento = opt.get();
-        Utente utente = optUtente.get();
         Optional<IscrizioneEvento> optIscrizione = iscrizioneEventoRepository.findByUtenteAndEvento(utente, evento);
         if(optIscrizione.isEmpty()){
             throw new IllegalArgumentException("Nessuna iscrizione all'evento");

@@ -26,8 +26,8 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userdetailsService() {
         JdbcUserDetailsManager manager = new JdbcUserDetailsManager(this.dataSource);
-        manager.setUsersByUsernameQuery("SELECT username, password, 1 as enabled FROM app_user WHERE username = ?");
-        manager.setAuthoritiesByUsernameQuery("SELECT username, role FROM app_user WHERE username = ?");
+        manager.setUsersByUsernameQuery("SELECT email, password, 1 as enabled FROM utente WHERE email = ?");
+        manager.setAuthoritiesByUsernameQuery("SELECT email, CONCAT('ROLE_', ruolo) FROM utente WHERE email = ?");
         return manager;
     }
 
@@ -37,10 +37,10 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> {
-            auth.requestMatchers(HttpMethod.GET, "/", "index", "/css/*", "/images/*",
-                "/giochi/**", "eventi/**", "/login", "/register"
+            auth.requestMatchers(HttpMethod.GET, "/", "/index", "/css/*", "/images/*",
+                "/giochi/**", "/eventi/**", "/login", "/register"
             ).permitAll();
             auth.requestMatchers(HttpMethod.POST, "/login", "/register").permitAll();
             // TODO: Aggiungere i vari permessi (Matteo gay)
@@ -50,6 +50,7 @@ public class SecurityConfig {
         });
         http.formLogin(form -> {
             form.loginPage("/login").permitAll();
+            form.usernameParameter("email");
             form.loginProcessingUrl("/perform-login");
             form.failureUrl("/login?error=true");
         });
