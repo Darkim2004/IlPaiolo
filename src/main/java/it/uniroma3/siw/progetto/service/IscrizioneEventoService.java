@@ -1,8 +1,10 @@
 package it.uniroma3.siw.progetto.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import it.uniroma3.siw.progetto.model.Evento;
 import it.uniroma3.siw.progetto.model.IscrizioneEvento;
@@ -11,8 +13,6 @@ import it.uniroma3.siw.progetto.model.Utente;
 import it.uniroma3.siw.progetto.repository.EventoRepository;
 import it.uniroma3.siw.progetto.repository.IscrizioneEventoRepository;
 import it.uniroma3.siw.progetto.repository.UtenteRepository;
-import jakarta.transaction.Transactional;
-
 @Service
 public class IscrizioneEventoService {
 
@@ -74,6 +74,23 @@ public class IscrizioneEventoService {
         }
         IscrizioneEvento iscrizione = optIscrizione.get();
         iscrizioneEventoRepository.delete(iscrizione);
+    }
+
+    @Transactional(readOnly = true)
+    public List<IscrizioneEvento> getIscrizioniByEvento(Long eventoId){
+        Optional<Evento> optEvento = eventoRepository.findById(eventoId);
+        if(optEvento.isEmpty()){
+            throw new IllegalArgumentException("Evento non trovato");
+        }
+        Evento evento = optEvento.get();
+        return iscrizioneEventoRepository.findByEvento(evento);
+    }
+    @Transactional
+    public void deleteById(Long iscrizioneId){
+        if(!iscrizioneEventoRepository.existsById(iscrizioneId)){
+            throw new IllegalArgumentException("Non esiste nessuna iscrizione all'evento");
+        }
+        iscrizioneEventoRepository.deleteById(iscrizioneId);
     }
     
 }
