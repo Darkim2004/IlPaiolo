@@ -31,15 +31,16 @@
                 <label>Ora fine</label>
                 <input type="time" th:field="*{oraFine}">
             </div>
-            <div class="field">
-                <label>Giochi</label>
-                <select name="giochiIds" multiple>
-                    <option th:each="gioco:${giochi}"
-                            th:value="${gioco.id}"
-                            th:text="${gioco.titolo}">
-                    </option>
-                </select>
+        <div class="field">
+            <label>Giochi</label>
+            <div th:each="gioco : ${giochi}">
+                <input type="checkbox" 
+                    name="giochiIds" 
+                    th:value="${gioco.id}" 
+                    th:id="${'gioco-' + gioco.id}">
+                <label th:for="${'gioco-' + gioco.id}" th:text="${gioco.titolo}"></label>
             </div>
+        </div>
             <div class="field">
                 <label>Numero max partecipanti</label>
                 <input type="number" th:field="*{numeroMaxPartecipanti}">

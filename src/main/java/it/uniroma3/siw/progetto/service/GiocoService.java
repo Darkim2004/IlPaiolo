@@ -1,11 +1,14 @@
 package it.uniroma3.siw.progetto.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import it.uniroma3.siw.progetto.model.Evento;
 import it.uniroma3.siw.progetto.model.Gioco;
+import it.uniroma3.siw.progetto.model.StatoEvento;
+import it.uniroma3.siw.progetto.model.StatoGioco;
 import it.uniroma3.siw.progetto.repository.EventoRepository;
 import it.uniroma3.siw.progetto.repository.GiocoRepository;
 
@@ -50,6 +53,10 @@ public class GiocoService {
             return List.of();
         }
         return eventoRepository.findByGiochiContaining(gioco);
+    }
+
+    public List<Gioco> findAllGiochi(){
+        return giocoRepository.findByStato(StatoGioco.DISPONIBILE);
     }
 
     public void update(Gioco giocoRequestBody, Gioco gioco) {

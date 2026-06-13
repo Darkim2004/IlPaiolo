@@ -1,9 +1,12 @@
 package it.uniroma3.siw.progetto.repository;
 
 import it.uniroma3.siw.progetto.model.StatoEvento;
+import it.uniroma3.siw.progetto.model.Utente;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import it.uniroma3.siw.progetto.model.Evento;
 import it.uniroma3.siw.progetto.model.Gioco;
+import it.uniroma3.siw.progetto.model.IscrizioneEvento;
 
 import java.time.LocalDate;
 import java.util.List;

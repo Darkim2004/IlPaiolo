@@ -2,6 +2,7 @@ package it.uniroma3.siw.progetto.controller;
 
 import it.uniroma3.siw.progetto.model.Evento;
 import it.uniroma3.siw.progetto.model.StatoEvento;
+import it.uniroma3.siw.progetto.model.StatoGioco;
 import it.uniroma3.siw.progetto.service.EventoService;
 import it.uniroma3.siw.progetto.service.GiocoService;
 
@@ -28,10 +29,13 @@ public class EventoController {
     }
 
     @GetMapping("/eventi")
-    public String listaEventi(Model model) {
-        model.addAttribute("eventi", eventoService.getEventiAperti());
-        return "eventi/lista";
+    public String listaEventi(Model model, Principal principal) {
+    model.addAttribute("eventi", eventoService.getEventiAperti());
+    if (principal != null) {
+        model.addAttribute("iscrizioniUtente", eventoService.getEventiIscrittoByEmail(principal.getName()));
     }
+    return "eventi/lista";
+}
 
     @GetMapping("/eventi/{id}")
     public String dettaglioEvento(@PathVariable Long id, Model model) {
@@ -58,9 +62,9 @@ public class EventoController {
     }
 
     @GetMapping("/admin/eventi/new")
-    public String getForm(Model model) {
+    public String getForm(Model model,StatoGioco stato) {
         model.addAttribute("evento",new Evento());
-        model.addAttribute("giochi",giocoService.count());
+        model.addAttribute("giochi",giocoService.findAllGiochi());
         return "admin/eventi/form";
     }
     
