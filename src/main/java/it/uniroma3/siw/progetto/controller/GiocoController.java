@@ -26,12 +26,14 @@ public class GiocoController {
         this.giocoService = giocoService;
     }
 
+    @Transactional(readOnly = true)
     @GetMapping("/giochi")
     public String listaGiochi(Model model) {
         model.addAttribute("giochi", giocoService.findAll());
         return "giochi/lista";
     }
 
+    @Transactional(readOnly = true)
     @GetMapping("/giochi/{id}")
     public String dettaglioGioco(@PathVariable("id") Long id, Model model) {
         Gioco gioco = giocoService.findById(id);
@@ -43,10 +45,11 @@ public class GiocoController {
         return "giochi/dettaglio";
     }
 
+    @Transactional(readOnly = true)
     @GetMapping("/admin/giochi/nuovo")
     public String nuovoGioco(Model model) {
         model.addAttribute("gioco", new Gioco());
-        return "giochi/form";
+        return "admin/giochi/form";
     }
 
     @PostMapping("/admin/giochi")
@@ -54,7 +57,7 @@ public class GiocoController {
     public String aggiungiGioco(@Valid @ModelAttribute Gioco gioco, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("gioco", gioco);
-            return "giochi/form";
+            return "admin/giochi/form";
         }
 
         giocoService.save(gioco);
@@ -69,7 +72,7 @@ public class GiocoController {
         }
 
         model.addAttribute("gioco", gioco);
-        return "giochi/form";
+        return "admin/giochi/form";
     }
 
     @Transactional
@@ -77,7 +80,7 @@ public class GiocoController {
     public String modificaGioco(@PathVariable("id") Long id, @Valid @ModelAttribute("gioco") Gioco giocoRequestBody, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("gioco", giocoRequestBody);
-            return "giochi/form";
+            return "admin/giochi/form";
         }
 
         Gioco gioco = giocoService.findById(id);

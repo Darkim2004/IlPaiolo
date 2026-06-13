@@ -9,6 +9,7 @@
     --red: #e43d24;
     --red-dark: #9e261a;
     --green: #73d17c;
+    --teal: #71d7d0;
     --border: rgba(255, 138, 31, 0.35);
     --shadow: rgba(0, 0, 0, 0.35);
 }
@@ -202,6 +203,41 @@ main {
     line-height: 1.7;
 }
 
+.home-counters {
+    margin-top: 28px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.counter-card {
+    min-height: 112px;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(113, 215, 208, 0.35);
+    border-radius: 8px;
+}
+
+.counter-card:hover,
+.counter-card:focus-visible {
+    border-color: var(--teal);
+    background: rgba(113, 215, 208, 0.12);
+}
+
+.counter-card strong {
+    display: block;
+    color: var(--teal);
+    font-size: 2.35rem;
+    line-height: 1;
+}
+
+.counter-card span {
+    display: block;
+    margin-top: 10px;
+    color: var(--text);
+    font-weight: 800;
+}
+
 .event-panel {
     background: var(--panel);
     border: 1px solid var(--border);
@@ -246,13 +282,20 @@ main {
     margin-top: 12px;
 }
 
-.game-list span {
+.game-list span,
+.game-list a {
     padding: 8px 12px;
     background: var(--panel-strong);
     border: 1px solid rgba(255, 179, 71, 0.35);
     border-radius: 8px;
     color: var(--text);
     font-weight: 800;
+}
+
+.game-list a:hover,
+.game-list a:focus-visible {
+    border-color: var(--orange-soft);
+    background: rgba(255, 138, 31, 0.16);
 }
 
 .event-stats {
@@ -313,11 +356,49 @@ main {
     line-height: 1.6;
 }
 
+.reservation-callout {
+    min-height: 360px;
+    margin: 8px 0 34px;
+    padding: 42px;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    border: 1px solid rgba(113, 215, 208, 0.3);
+    border-radius: 8px;
+    background:
+        linear-gradient(90deg, rgba(18, 11, 8, 0.96), rgba(18, 11, 8, 0.62), rgba(18, 11, 8, 0.2)),
+        url("../images/FotoDiGruppo.jpg") center / cover;
+    box-shadow: 0 26px 55px var(--shadow);
+}
+
+.reservation-content {
+    max-width: 640px;
+}
+
+.reservation-content h2 {
+    margin: 12px 0 16px;
+    font-size: 4rem;
+    line-height: 0.95;
+}
+
+.reservation-content p:not(.eyebrow) {
+    margin: 0 0 24px;
+    color: var(--text);
+    font-size: 1.12rem;
+    line-height: 1.65;
+}
+
+.reservation-button {
+    min-height: 58px;
+    padding: 16px 24px;
+    font-size: 1.08rem;
+}
+
 .home-shortcuts {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 16px;
-    padding: 0 0 56px;
+    padding: 0 0 34px;
 }
 
 .home-shortcuts a {
@@ -338,6 +419,374 @@ main {
     display: block;
     margin-top: 12px;
     font-size: 1.25rem;
+}
+
+.general-info {
+    padding: 22px 0 68px;
+    display: grid;
+    grid-template-columns: minmax(220px, 0.55fr) minmax(0, 1.45fr);
+    gap: 28px;
+    border-top: 1px solid rgba(255, 138, 31, 0.24);
+}
+
+.general-info h2 {
+    margin: 12px 0 0;
+    font-size: 2.3rem;
+    line-height: 1.1;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.info-item {
+    min-height: 150px;
+    padding: 20px;
+    background: #190d0a;
+    border: 1px solid rgba(255, 138, 31, 0.25);
+    border-radius: 8px;
+}
+
+.info-item p {
+    margin: 14px 0 0;
+    color: var(--text);
+    font-weight: 800;
+    line-height: 1.6;
+}
+
+.info-item a:hover,
+.info-item a:focus-visible {
+    color: var(--orange-soft);
+}
+
+.page-hero {
+    min-height: 260px;
+    padding: 56px 0 34px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 28px;
+    border-bottom: 1px solid rgba(255, 138, 31, 0.24);
+}
+
+.page-hero > div {
+    max-width: 720px;
+}
+
+.page-hero h1,
+.game-detail-panel h1 {
+    margin: 12px 0 16px;
+    font-size: 3.4rem;
+    line-height: 1;
+}
+
+.empty-panel {
+    margin: 34px 0 68px;
+    padding: 42px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 26px 55px var(--shadow);
+}
+
+.empty-panel h2 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+.empty-panel p {
+    margin: 14px auto 0;
+    max-width: 520px;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+.game-grid {
+    padding: 34px 0 68px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.game-card {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--panel);
+    border: 1px solid rgba(255, 138, 31, 0.25);
+    border-radius: 8px;
+    box-shadow: 0 20px 40px var(--shadow);
+}
+
+.game-card-image {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    background: #000;
+    border-bottom: 1px solid rgba(255, 138, 31, 0.22);
+}
+
+.game-card-body {
+    flex: 1;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 22px;
+}
+
+.game-card h2 {
+    margin: 10px 0 0;
+    font-size: 1.6rem;
+    line-height: 1.1;
+}
+
+.game-meta,
+.detail-grid {
+    display: grid;
+    gap: 12px;
+}
+
+.game-meta {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.game-meta span,
+.detail-grid > div {
+    min-height: 58px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(113, 215, 208, 0.22);
+    border-radius: 8px;
+    color: var(--text);
+    font-weight: 800;
+}
+
+.game-state {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    line-height: 1.15;
+}
+
+.card-actions,
+.form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+}
+
+.card-actions form,
+.event-actions form {
+    display: inline-flex;
+}
+
+.danger-button {
+    min-height: 44px;
+    padding: 12px 18px;
+    border: 0;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text);
+    background: var(--red-dark);
+    font: inherit;
+    font-weight: 800;
+}
+
+.danger-button:hover,
+.danger-button:focus-visible {
+    background: var(--red);
+}
+
+.game-detail {
+    min-height: calc(100vh - 78px);
+    padding: 56px 0 68px;
+    display: grid;
+    grid-template-columns: minmax(280px, 0.8fr) minmax(0, 1.2fr);
+    align-items: start;
+    gap: 34px;
+}
+
+.game-detail-media {
+    position: sticky;
+    top: 112px;
+    overflow: hidden;
+    background: #000;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 26px 55px var(--shadow);
+}
+
+.game-detail-media img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    display: block;
+    object-fit: cover;
+}
+
+.game-detail-panel {
+    padding: 34px;
+}
+
+.detail-grid {
+    margin: 28px 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.detail-grid strong {
+    display: block;
+    margin-top: 10px;
+    font-size: 1.2rem;
+}
+
+.linked-events {
+    padding: 24px 0;
+    border-top: 1px solid rgba(255, 138, 31, 0.22);
+}
+
+.linked-events h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.game-form {
+    max-width: 920px;
+    margin: 34px auto 68px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.form-field {
+    display: grid;
+    gap: 8px;
+}
+
+.form-field-wide {
+    grid-column: 1 / -1;
+}
+
+.form-field label {
+    color: var(--orange-soft);
+    font-size: 0.82rem;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.form-field input,
+.form-field textarea,
+.form-field select {
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 14px;
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 179, 71, 0.35);
+    border-radius: 8px;
+    font: inherit;
+}
+
+.form-field textarea {
+    resize: vertical;
+    line-height: 1.5;
+}
+
+.form-field input:focus,
+.form-field textarea:focus,
+.form-field select:focus {
+    outline: 2px solid var(--teal);
+    outline-offset: 2px;
+}
+
+.field-error {
+    color: var(--orange-soft);
+    font-weight: 800;
+}
+
+.form-actions {
+    margin-top: 26px;
+}
+
+.auth-shell {
+    min-height: calc(100vh - 78px);
+    padding: 56px 0 68px;
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(320px, 0.8fr);
+    align-items: center;
+    gap: 48px;
+}
+
+.auth-copy {
+    max-width: 520px;
+}
+
+.auth-copy h1 {
+    margin: 14px 0 18px;
+    font-size: 3.4rem;
+    line-height: 1;
+}
+
+.auth-panel {
+    width: min(100%, 520px);
+    justify-self: end;
+}
+
+.auth-panel-header {
+    margin-bottom: 22px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid rgba(255, 138, 31, 0.22);
+}
+
+.auth-panel-header h2 {
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+.auth-panel-header p {
+    margin: 8px 0 0;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+.auth-form-fields {
+    display: grid;
+    gap: 18px;
+}
+
+.auth-alert {
+    margin: 0 0 18px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-weight: 800;
+    line-height: 1.4;
+}
+
+.auth-alert-error {
+    color: var(--text);
+    background: rgba(228, 61, 36, 0.18);
+    border: 1px solid rgba(228, 61, 36, 0.45);
+}
+
+.auth-alert-success {
+    color: var(--text);
+    background: rgba(115, 209, 124, 0.16);
+    border: 1px solid rgba(115, 209, 124, 0.42);
+}
+
+.auth-switch {
+    margin: 22px 0 0;
+    color: var(--muted);
+    line-height: 1.5;
 }
 
 @media (max-width: 820px) {
@@ -370,8 +819,64 @@ main {
         font-size: 2.45rem;
     }
 
+    .reservation-callout {
+        min-height: 330px;
+        padding: 30px;
+    }
+
+    .reservation-content h2 {
+        font-size: 3rem;
+    }
+
     .home-shortcuts {
         grid-template-columns: 1fr;
+    }
+
+    .general-info,
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .page-hero {
+        min-height: auto;
+        padding-top: 36px;
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .page-hero h1,
+    .game-detail-panel h1 {
+        font-size: 2.45rem;
+    }
+
+    .game-grid,
+    .game-detail,
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .auth-shell {
+        min-height: auto;
+        grid-template-columns: 1fr;
+        gap: 28px;
+        padding-top: 36px;
+    }
+
+    .auth-copy h1 {
+        font-size: 2.45rem;
+    }
+
+    .auth-panel {
+        width: 100%;
+        justify-self: stretch;
+    }
+
+    .game-detail-media {
+        position: static;
+    }
+
+    .game-detail-media img {
+        aspect-ratio: 16 / 10;
     }
 }
 
@@ -403,7 +908,48 @@ main {
 
     .event-actions,
     .event-actions form,
-    .primary-button {
+    .primary-button,
+    .danger-button,
+    .form-actions,
+    .form-actions .ghost-button,
+    .card-actions,
+    .card-actions form {
         width: 100%;
+    }
+
+    .card-actions {
+        align-items: stretch;
+    }
+
+    .home-counters {
+        grid-template-columns: 1fr;
+    }
+
+    .reservation-callout {
+        min-height: 360px;
+        padding: 24px;
+        background-position: 58% center;
+    }
+
+    .reservation-content h2 {
+        font-size: 2.45rem;
+    }
+
+    .game-grid,
+    .game-detail {
+        padding-bottom: 44px;
+    }
+
+    .game-card-body,
+    .game-detail-panel,
+    .game-form,
+    .auth-panel,
+    .empty-panel {
+        padding: 22px;
+    }
+
+    .game-meta,
+    .detail-grid {
+        grid-template-columns: 1fr;
     }
 }
