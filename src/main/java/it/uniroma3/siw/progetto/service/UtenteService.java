@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import it.uniroma3.siw.progetto.model.Utente;
 import it.uniroma3.siw.progetto.repository.UtenteRepository;
 
+import java.util.Optional;
+
 @Service
 public class UtenteService {
 
@@ -22,7 +24,7 @@ public class UtenteService {
         this.utenteRepository.save(utente);
     }
 
-    public Utente findByEmail(String email) {
+    public Optional<Utente> findByEmail(String email) {
         return this.utenteRepository.findByEmail(email);
     }
 }

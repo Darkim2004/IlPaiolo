@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Le mie prenotazioni</title>
+</head>
+<body>
+
+<nav>
+    <a href="/home">Il Paiolo</a> |
+    <a href="/eventi">Eventi</a> |
+    <a href="/giochi">Giochi</a> |
+    <a href="/logout">Esci</a>
+</nav>
+
+<hr>
+
+<h1>Le mie prenotazioni</h1>
+
+<div th:if="${successo}">
+    <p th:text="${successo}"></p>
+</div>
+
+<p th:if="${#lists.isEmpty(prenotazioni)}">
+    Non hai ancora nessuna prenotazione.
+</p>
+
+<div th:each="p : ${prenotazioni}">
+    <hr>
+    <p>
+        <strong>Tavolo <span th:text="${p.tavolo.numero}"></span></strong>
+        <span th:if="${p.tavolo.nome != null}"> · <span th:text="${p.tavolo.nome}"></span></span>
+    </p>
+    <p>Data: <span th:text="${p.data}"></span></p>
+    <p>Orario: <span th:text="${p.oraInizio}"></span> – <span th:text="${p.oraFine}"></span></p>
+    <p>Persone: <span th:text="${p.numeroPersone}"></span></p>
+    <p th:if="${p.note != null and !p.note.isEmpty()}">Note: <span th:text="${p.note}"></span></p>
+
+    <div th:if="${p.data.isAfter(#temporals.createToday())}">
+        <a th:href="@{/prenotazioni/{id}/modifica(id=${p.id})}">Modifica</a>
+        <form th:action="@{/prenotazioni/{id}/elimina(id=${p.id})}" method="post" style="display:inline">
+            <button type="submit" onclick="return confirm('Vuoi annullare questa prenotazione?')">Annulla</button>
+        </form>
+    </div>
+</div>
+
+<hr>
+<a href="/prenotazioni/nuova">+ Nuova prenotazione</a>
+
+</body>
+</html>
