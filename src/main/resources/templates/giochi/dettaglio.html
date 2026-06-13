@@ -1,57 +1,92 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${gioco.titolo}">Dettaglio gioco</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${gioco.titolo + ' - Il Paiolo'}">Dettaglio gioco</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
 </head>
 <body>
+    <header class="site-header">
+        <nav class="navbar" aria-label="Navigazione principale">
+            <a class="brand" th:href="@{/}">
+                <img class="brand-logo" th:src="@{/images/IlPaiolo_logo.png}" alt="Logo Il Paiolo">
+                <span class="brand-name">Il Paiolo</span>
+            </a>
 
-<h1 th:text="${gioco.titolo}">Titolo gioco</h1>
+            <div class="nav-links">
+                <a th:href="@{/tavoli}">Tavoli</a>
+                <a th:href="@{/eventi}">Eventi</a>
+                <a th:href="@{/giochi}">Giochi</a>
+            </div>
 
-<img th:src="${gioco.immagineUrl != null and !#strings.isEmpty(gioco.immagineUrl) ? gioco.immagineUrl : '/images/IlPaiolo_logo.png'}"
-     th:alt="${gioco.titolo}"
-     style="max-width: 300px;">
+            <div class="nav-auth">
+                <a class="login-button" sec:authorize="!isAuthenticated()" th:href="@{/login}">Login</a>
+                <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">
+                    <input th:replace="~{componenti :: csrfInput}">
+                    <button class="ghost-button" type="submit">Esci</button>
+                </form>
+            </div>
+        </nav>
+    </header>
 
-<p th:if="${gioco.descrizione != null}" th:text="${gioco.descrizione}">Descrizione</p>
+    <main>
+        <section class="game-detail" aria-labelledby="gioco-title">
+            <div class="game-detail-media">
+                <img th:src="${gioco.immagineUrl != null and !#strings.isEmpty(gioco.immagineUrl) ? gioco.immagineUrl : '/images/IlPaiolo_logo.png'}"
+                     th:alt="${gioco.titolo}">
+            </div>
 
-<p>Categoria: <span th:text="${gioco.categoria != null ? gioco.categoria : 'Non specificata'}">Categoria</span></p>
-<p>Difficolta: <span th:text="${gioco.difficolta != null ? gioco.difficolta : 'Non specificata'}">Difficolta</span></p>
-<p>Stato: <span th:text="${gioco.stato}">DISPONIBILE</span></p>
+            <article class="event-panel game-detail-panel">
+                <p class="eyebrow" th:text="${gioco.categoria != null and !#strings.isEmpty(gioco.categoria) ? gioco.categoria : 'Gioco da tavolo'}">Categoria</p>
+                <h1 id="gioco-title" th:text="${gioco.titolo}">Titolo gioco</h1>
+                <p class="event-description" th:if="${gioco.descrizione != null and !#strings.isEmpty(gioco.descrizione)}" th:text="${gioco.descrizione}">
+                    Descrizione
+                </p>
 
-<p th:if="${gioco.numeroMinGiocatori != null or gioco.numeroMaxGiocatori != null}">
-    Giocatori:
-    <span th:text="${gioco.numeroMinGiocatori != null ? gioco.numeroMinGiocatori : '?'}">1</span>
-    -
-    <span th:text="${gioco.numeroMaxGiocatori != null ? gioco.numeroMaxGiocatori : '?'}">4</span>
-</p>
+                <div class="detail-grid">
+                    <div>
+                        <span class="detail-label">Stato</span>
+                        <strong th:text="${gioco.stato.label}">Disponibile</strong>
+                    </div>
+                    <div>
+                        <span class="detail-label">Difficolta</span>
+                        <strong th:text="${gioco.difficolta != null and !#strings.isEmpty(gioco.difficolta) ? gioco.difficolta : 'Non specificata'}">Media</strong>
+                    </div>
+                    <div th:if="${gioco.numeroMinGiocatori != null or gioco.numeroMaxGiocatori != null}">
+                        <span class="detail-label">Giocatori</span>
+                        <strong>
+                            <span th:text="${gioco.numeroMinGiocatori != null ? gioco.numeroMinGiocatori : '?'}">1</span>
+                            -
+                            <span th:text="${gioco.numeroMaxGiocatori != null ? gioco.numeroMaxGiocatori : '?'}">4</span>
+                        </strong>
+                    </div>
+                    <div th:if="${gioco.durataMediaMinuti != null}">
+                        <span class="detail-label">Durata media</span>
+                        <strong><span th:text="${gioco.durataMediaMinuti}">60</span> min</strong>
+                    </div>
+                </div>
 
-<p th:if="${gioco.durataMediaMinuti != null}">
-    Durata media:
-    <span th:text="${gioco.durataMediaMinuti}">60</span>
-    minuti
-</p>
+                <section class="linked-events" aria-labelledby="eventi-associati-title">
+                    <h2 id="eventi-associati-title">Eventi associati</h2>
+                    <p class="muted" th:if="${#sets.isEmpty(gioco.eventi)}">Nessun evento associato.</p>
+                    <div class="game-list" th:if="${!#sets.isEmpty(gioco.eventi)}">
+                        <a th:each="evento : ${gioco.eventi}"
+                           th:href="@{/eventi/{id}(id=${evento.id})}"
+                           th:text="${evento.nome}">Evento</a>
+                    </div>
+                </section>
 
-<h2>Eventi associati</h2>
-<div th:if="${#sets.isEmpty(gioco.eventi)}">
-    <p>Nessun evento associato.</p>
-</div>
-<ul th:if="${!#sets.isEmpty(gioco.eventi)}">
-    <li th:each="evento : ${gioco.eventi}">
-        <a th:href="@{/eventi/{id}(id=${evento.id})}" th:text="${evento.nome}">Evento</a>
-    </li>
-</ul>
-
-<p>
-    <a th:href="@{/admin/giochi/{id}/modifica(id=${gioco.id})}">Modifica</a>
-</p>
-<form th:action="@{/admin/giochi/{id}/elimina(id=${gioco.id})}" method="post">
-    <input th:replace="~{componenti :: csrfInput}">
-    <button type="submit">Elimina</button>
-</form>
-
-<p>
-    <a th:href="@{/giochi}">Torna alla lista</a>
-</p>
-
+                <div class="event-actions">
+                    <a class="text-link" th:href="@{/giochi}">Torna alla lista</a>
+                    <a class="primary-button" sec:authorize="hasRole('ADMIN')" th:href="@{/admin/giochi/{id}/modifica(id=${gioco.id})}">Modifica</a>
+                    <form sec:authorize="hasRole('ADMIN')" th:action="@{/admin/giochi/{id}/elimina(id=${gioco.id})}" method="post">
+                        <input th:replace="~{componenti :: csrfInput}">
+                        <button class="danger-button" type="submit">Elimina</button>
+                    </form>
+                </div>
+            </article>
+        </section>
+    </main>
 </body>
 </html>
