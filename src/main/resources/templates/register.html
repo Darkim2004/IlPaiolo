@@ -2,48 +2,83 @@
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Registrazione</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrati - Il Paiolo</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
 </head>
 <body>
+    <header class="site-header">
+        <nav class="navbar" aria-label="Navigazione principale">
+            <a class="brand" th:href="@{/}">
+                <img class="brand-logo" th:src="@{/images/IlPaiolo_logo.png}" alt="Logo Il Paiolo">
+                <span class="brand-name">Il Paiolo</span>
+            </a>
 
-<h1>Registrati</h1>
+            <div class="nav-links">
+                <a th:href="@{/tavoli}">Tavoli</a>
+                <a th:href="@{/eventi}">Eventi</a>
+                <a th:href="@{/giochi}">Giochi</a>
+            </div>
 
-<form th:action="@{/register}" th:object="${utente}" method="post">
-    <input th:replace="~{componenti :: csrfInput}">
+            <div class="nav-auth">
+                <a class="login-button" th:href="@{/login}">Accedi</a>
+            </div>
+        </nav>
+    </header>
 
-    <div>
-        <label for="nome">Nome</label>
-        <input id="nome" type="text" th:field="*{nome}" autocomplete="given-name">
-    </div>
+    <main>
+        <section class="auth-shell" aria-labelledby="register-title">
+            <div class="auth-copy">
+                <p class="eyebrow">Nuovo profilo</p>
+                <h1 id="register-title">Entra nel Paiolo</h1>
+                <p class="intro">Crea il tuo account per partecipare agli eventi e gestire le prossime serate.</p>
+            </div>
 
-    <div>
-        <label for="cognome">Cognome</label>
-        <input id="cognome" type="text" th:field="*{cognome}" autocomplete="family-name">
-    </div>
+            <form class="auth-panel event-panel" th:action="@{/register}" th:object="${utente}" method="post">
+                <input th:replace="~{componenti :: csrfInput}">
 
-    <div>
-        <label for="email">Email</label>
-        <input id="email" type="email" th:field="*{email}" autocomplete="email" required>
-        <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email non valida</p>
-    </div>
+                <div class="auth-panel-header">
+                    <h2>Registrazione</h2>
+                    <p>Bastano pochi dati per preparare il tuo tavolo.</p>
+                </div>
 
-    <div>
-        <label for="password">Password</label>
-        <input id="password" type="password" th:field="*{password}" autocomplete="new-password" required>
-        <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password non valida</p>
-    </div>
+                <div class="auth-form-fields">
+                    <div class="form-grid">
+                        <div class="form-field">
+                            <label for="nome">Nome</label>
+                            <input id="nome" type="text" th:field="*{nome}" autocomplete="given-name">
+                        </div>
 
-    <button type="submit">Crea account</button>
-</form>
+                        <div class="form-field">
+                            <label for="cognome">Cognome</label>
+                            <input id="cognome" type="text" th:field="*{cognome}" autocomplete="family-name">
+                        </div>
+                    </div>
 
-<p>
-    Hai gia un account?
-    <a th:href="@{/login}">Accedi</a>
-</p>
+                    <div class="form-field">
+                        <label for="email">Email</label>
+                        <input id="email" type="email" th:field="*{email}" autocomplete="email" required>
+                        <span class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email non valida</span>
+                    </div>
 
-<p>
-    <a th:href="@{/}">Torna alla home</a>
-</p>
+                    <div class="form-field">
+                        <label for="password">Password</label>
+                        <input id="password" type="password" th:field="*{password}" autocomplete="new-password" required>
+                        <span class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password non valida</span>
+                    </div>
+                </div>
 
+                <div class="form-actions">
+                    <button class="primary-button" type="submit">Crea account</button>
+                    <a class="ghost-button" th:href="@{/}">Home</a>
+                </div>
+
+                <p class="auth-switch">
+                    Hai gia un account?
+                    <a class="text-link" th:href="@{/login}">Accedi</a>
+                </p>
+            </form>
+        </section>
+    </main>
 </body>
 </html>
