@@ -1,5 +1,7 @@
 package it.uniroma3.siw.progetto.service;
 
+import java.util.Optional;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +24,7 @@ public class UtenteService {
         this.utenteRepository.save(utente);
     }
 
-    public Utente findByEmail(String email) {
+    public Optional<Utente> findByEmail(String email) {
         return this.utenteRepository.findByEmail(email);
     }
 }
