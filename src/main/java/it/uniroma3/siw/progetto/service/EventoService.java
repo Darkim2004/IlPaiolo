@@ -16,8 +16,9 @@ import it.uniroma3.siw.progetto.repository.UtenteRepository;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -42,6 +43,20 @@ public class EventoService {
     @Transactional(readOnly = true)
     public List<Evento> getEventiAperti() {
         return eventoRepository.findByStatoAndDataAfterOrderByDataAsc(StatoEvento.APERTO, LocalDate.now());
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Evento> getEventoDellaSettimana() {
+        return getEventoDellaSettimana(LocalDate.now());
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Evento> getEventoDellaSettimana(LocalDate oggi) {
+        LocalDate fineSettimana = oggi.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+        return eventoRepository.findByStatoAndDataBetweenOrderByDataAscOraInizioAsc(
+                StatoEvento.APERTO, oggi, fineSettimana)
+                .stream()
+                .findFirst();
     }
 
     @Transactional(readOnly = true)
