@@ -79,4 +79,14 @@ public class TavoloService {
             return false;
         }).orElse(false);
     }
+
+
+    @Transactional
+    public void attiva(Long id) {
+        tavoloRepository.findById(id).ifPresent(t -> {
+            t.setAttivo(true);
+            t.setDisponibile(true);
+            tavoloRepository.save(t);
+        });
+    }
 }
