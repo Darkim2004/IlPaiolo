@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Iscrizioni evento</title>
+</head>
+<body>
+    <h1 th:text="${evento.nome}"></h1>
+    <p th:text="${evento.data}"></p>
+
+    <h2>Iscritti</h2>
+    <table>
+        <tr>
+            <th>Nome</th>
+            <th>Cognome</th>
+            <th>Data iscrizione</th>
+            <th>Azioni</th>
+        </tr>
+        <tr th:each="iscrizione : ${iscrizioni}">
+            <td th:text="${iscrizione.utente.nome}"></td>
+            <td th:text="${iscrizione.utente.cognome}"></td>
+            <td th:text="${iscrizione.dataIscrizione}"></td>
+            <td>
+                <form th:action="@{/admin/iscrizioni/{id}/delete(id=${iscrizione.id})}" method="post">
+                    <input type="hidden" name="eventoId" th:value="${evento.id}">
+                    <button type="submit">Elimina</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

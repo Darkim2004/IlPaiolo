@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -135,6 +136,19 @@ public class EventoService {
         iscrizioneEventoRepository.save(iscrizione);
     }
 
+    @Transactional(readOnly = true)
+    public List<Long> getEventiIscrittoByEmail(String email) {
+        Optional<Utente> optUtente = utenteRepository.findByEmail(email);
+        if (optUtente.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<IscrizioneEvento> iscrizioni = iscrizioneEventoRepository.findByUtente(optUtente.get());
+        List<Long> idEventi = new ArrayList<>();
+        for (IscrizioneEvento iscrizione : iscrizioni) {
+            idEventi.add(iscrizione.getEvento().getId());
+        }
+        return idEventi;
+    }
     @Transactional
     public void annullaIscrizione(Long eventoId, String email) {
 
