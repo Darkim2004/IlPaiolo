@@ -9,7 +9,7 @@
 <h1>Giochi</h1>
 
 <p>
-    <a th:href="@{/giochi/nuovo}">Aggiungi gioco</a>
+    <a th:href="@{/admin/giochi/nuovo}">Aggiungi gioco</a>
 </p>
 
 <div th:if="${#lists.isEmpty(giochi)}">
@@ -28,8 +28,8 @@
     </p>
 
     <a th:href="@{/giochi/{id}(id=${gioco.id})}">Dettaglio</a>
-    <a th:href="@{/giochi/{id}/modifica(id=${gioco.id})}">Modifica</a>
-    <form th:action="@{/giochi/{id}/elimina(id=${gioco.id})}" method="post" style="display: inline;">
+    <a th:href="@{/admin/giochi/{id}/modifica(id=${gioco.id})}">Modifica</a>
+    <form th:action="@{/admin/giochi/{id}/elimina(id=${gioco.id})}" method="post" style="display: inline;">
         <input th:replace="~{componenti :: csrfInput}">
         <button type="submit">Elimina</button>
     </form>

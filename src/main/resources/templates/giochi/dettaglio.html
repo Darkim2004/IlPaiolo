@@ -42,9 +42,9 @@
 </ul>
 
 <p>
-    <a th:href="@{/giochi/{id}/modifica(id=${gioco.id})}">Modifica</a>
+    <a th:href="@{/admin/giochi/{id}/modifica(id=${gioco.id})}">Modifica</a>
 </p>
-<form th:action="@{/giochi/{id}/elimina(id=${gioco.id})}" method="post">
+<form th:action="@{/admin/giochi/{id}/elimina(id=${gioco.id})}" method="post">
     <input th:replace="~{componenti :: csrfInput}">
     <button type="submit">Elimina</button>
 </form>

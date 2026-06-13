@@ -8,7 +8,7 @@
 
 <h1 th:text="${gioco.id == null ? 'Nuovo gioco' : 'Modifica gioco'}">Form gioco</h1>
 
-<form th:action="${gioco.id == null ? '/giochi' : '/giochi/' + gioco.id}" th:object="${gioco}" method="post">
+<form th:action="${gioco.id == null} ? @{/admin/giochi} : @{/admin/giochi/{id}(id=${gioco.id})}" th:object="${gioco}" method="post">
     <input th:replace="~{componenti :: csrfInput}">
     <input type="hidden" th:field="*{id}">
 
