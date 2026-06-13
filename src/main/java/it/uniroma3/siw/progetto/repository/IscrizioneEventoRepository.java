@@ -13,4 +13,5 @@ public interface IscrizioneEventoRepository extends JpaRepository<IscrizioneEven
     int countByEvento(Evento evento);
     Optional<IscrizioneEvento> findByUtenteAndEvento(Utente utente, Evento evento);
     List<IscrizioneEvento> findByEvento(Evento evento);
+    List<IscrizioneEvento> findByUtente(Utente utente);
 }

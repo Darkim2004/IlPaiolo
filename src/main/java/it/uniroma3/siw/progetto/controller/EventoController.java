@@ -2,7 +2,9 @@ package it.uniroma3.siw.progetto.controller;
 
 import it.uniroma3.siw.progetto.model.Evento;
 import it.uniroma3.siw.progetto.model.StatoEvento;
+import it.uniroma3.siw.progetto.model.StatoGioco;
 import it.uniroma3.siw.progetto.service.EventoService;
+import it.uniroma3.siw.progetto.service.GiocoService;
 
 import java.security.Principal;
 import java.util.List;
@@ -18,17 +20,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class EventoController {
 
+    private final GiocoService giocoService;
     private final EventoService eventoService;
 
-    public EventoController(EventoService eventoService) {
+    public EventoController(EventoService eventoService, GiocoService giocoService) {
         this.eventoService = eventoService;
+        this.giocoService = giocoService;
     }
 
     @GetMapping("/eventi")
-    public String listaEventi(Model model) {
-        model.addAttribute("eventi", eventoService.getEventiAperti());
-        return "eventi/lista";
+    public String listaEventi(Model model, Principal principal) {
+    model.addAttribute("eventi", eventoService.getEventiAperti());
+    if (principal != null) {
+        model.addAttribute("iscrizioniUtente", eventoService.getEventiIscrittoByEmail(principal.getName()));
     }
+    return "eventi/lista";
+}
 
     @GetMapping("/eventi/{id}")
     public String dettaglioEvento(@PathVariable Long id, Model model) {
@@ -51,32 +58,33 @@ public class EventoController {
     @PostMapping("/admin/eventi/save")
     public String save(@ModelAttribute Evento evento, @RequestParam(required = false) List<Long> giochiIds) {
         eventoService.save(evento, giochiIds);
-        return "redirect:/admin/eventi";
+        return "redirect:/eventi";
     }
 
-    @GetMapping("/admin/eventi")
-    public String listaEventiAdmin(Model model) {
-        model.addAttribute("eventi", eventoService.getAllEventi());
-        return "admin/eventi/lista";
+    @GetMapping("/admin/eventi/new")
+    public String getForm(Model model,StatoGioco stato) {
+        model.addAttribute("evento",new Evento());
+        model.addAttribute("giochi",giocoService.findAllGiochi());
+        return "admin/eventi/form";
     }
-
-    @GetMapping("/admin/eventi/{id}/iscrizioni")
+    
+    @GetMapping("/eventi/{id}/iscrizioni")
     public String listaIscrizioni(@PathVariable Long id, Model model) {
         model.addAttribute("evento", eventoService.getEventoById(id));
         model.addAttribute("iscrizioni", eventoService.getIscrizioniByEvento(id));
-        return "admin/eventi/iscrizioni";
+        return "eventi/iscrizioni";
     }
 
     @PostMapping("/admin/eventi/{id}/stato")
     public String cambiaStato(@PathVariable Long id, @RequestParam StatoEvento stato) {
         eventoService.cambiaStato(id, stato);
-        return "redirect:/admin/eventi/" + id + "/iscrizioni";
+        return "redirect:/eventi/" + id + "/iscrizioni";
     }
 
     @PostMapping("/admin/iscrizioni/{id}/delete")
     public String deleteIscrizione(@PathVariable Long id, @RequestParam Long eventoId) {
         eventoService.deleteIscrizione(id);
-        return "redirect:/admin/eventi/" + eventoId + "/iscrizioni";
+        return "redirect:/eventi/" + eventoId + "/iscrizioni";
     }
 }
 

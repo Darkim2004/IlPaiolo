@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 import it.uniroma3.siw.progetto.model.Utente;
 import it.uniroma3.siw.progetto.repository.UtenteRepository;
 
-import java.util.Optional;
-
 @Service
 public class UtenteService {
 
