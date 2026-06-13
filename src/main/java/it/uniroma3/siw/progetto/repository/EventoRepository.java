@@ -12,4 +12,5 @@ public interface EventoRepository extends JpaRepository<Evento, Long> {
     List<Evento> findByStatoAndDataAfterOrderByDataAsc(StatoEvento stato, LocalDate data);
     List<Evento> findByStatoAndDataBetweenOrderByDataAscOraInizioAsc(StatoEvento stato, LocalDate dataInizio, LocalDate dataFine);
     List<Evento> findByGiochiContaining(Gioco gioco);
+    long countByStatoAndDataGreaterThanEqual(StatoEvento stato, LocalDate data);
 }
