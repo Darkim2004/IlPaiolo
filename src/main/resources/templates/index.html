@@ -1,29 +1,117 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Ludo Pub Home page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Il Paiolo</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
 </head>
-
 <body>
-    <h1>Welcome to Ludo Pub</h1>
-    <p>Luiggi è gay</p>
+    <header class="site-header">
+        <nav class="navbar" aria-label="Navigazione principale">
+            <a class="brand" th:href="@{/}">
+                <img class="brand-logo" th:src="@{/images/IlPaiolo_logo.png}" alt="Logo Il Paiolo">
+                <span class="brand-name">Il Paiolo</span>
+            </a>
 
-    <a href ="/eventi">Eventi</a>
-    <a href ="/giochi">Giochi</a>
+            <div class="nav-links">
+                <a th:href="@{/tavoli}">Tavoli</a>
+                <a th:href="@{/eventi}">Eventi</a>
+                <a th:href="@{/giochi}">Giochi</a>
+            </div>
 
-    <a href = "/login">Loggati</a>
+            <div class="nav-auth">
+                <a class="login-button" sec:authorize="!isAuthenticated()" th:href="@{/login}">Login</a>
+                <div class="user-area" sec:authorize="isAuthenticated()">
+                    <span class="user-greeting">Ciao <strong th:text="${nomeUtente}">Giocatore</strong></span>
+                    <form th:action="@{/logout}" method="post">
+                        <input th:replace="~{componenti :: csrfInput}">
+                        <button class="ghost-button" type="submit">Esci</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="weekly-event" aria-labelledby="evento-settimana-title">
+            <div class="weekly-copy">
+                <p class="eyebrow">Evento della settimana</p>
+                <h1 id="evento-settimana-title">La prossima serata al tavolo</h1>
+                <p class="intro">
+                    Entra nel Paiolo, scegli la tua squadra e preparati a una serata di giochi,
+                    brindisi e sfide leggere.
+                </p>
+            </div>
+
+            <article class="event-panel" th:if="${eventoSettimana != null}">
+                <div class="event-main">
+                    <p class="event-date">
+                        <span th:text="${#temporals.format(eventoSettimana.data, 'EEEE d MMMM')}">Venerdi 20 giugno</span>
+                        <span>alle</span>
+                        <span th:text="${#temporals.format(eventoSettimana.oraInizio, 'HH:mm')}">20:30</span>
+                    </p>
+                    <h2 th:text="${eventoSettimana.nome}">Serata nuovi giocatori</h2>
+                    <p class="event-description" th:text="${eventoSettimana.descrizione}">
+                        Evento introduttivo con giochi semplici e spiegazione delle regole.
+                    </p>
+                </div>
+
+                <div class="event-details">
+                    <div>
+                        <span class="detail-label">Giochi in programma</span>
+                        <div class="game-list" th:if="${eventoSettimana.giochi != null and !eventoSettimana.giochi.isEmpty()}">
+                            <span th:each="gioco : ${eventoSettimana.giochi}" th:text="${gioco.titolo}">Dixit</span>
+                        </div>
+                        <p class="muted" th:if="${eventoSettimana.giochi == null or eventoSettimana.giochi.isEmpty()}">
+                            Giochi in definizione
+                        </p>
+                    </div>
+
+                    <div class="event-stats">
+                        <div>
+                            <span class="detail-label">Posti liberi</span>
+                            <strong th:text="${eventoSettimana.numeroMaxPartecipanti - eventoSettimana.iscrizioni.size()}">10</strong>
+                        </div>
+                        <div>
+                            <span class="detail-label">Costo</span>
+                            <strong th:text="${eventoSettimana.costoPartecipazione != null and eventoSettimana.costoPartecipazione.signum() > 0 ? eventoSettimana.costoPartecipazione + ' euro' : 'Gratis'}">Gratis</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="event-actions">
+                    <form sec:authorize="isAuthenticated()" th:action="@{/eventi/{id}/iscriviti(id=${eventoSettimana.id})}" method="post">
+                        <input th:replace="~{componenti :: csrfInput}">
+                        <button class="primary-button" type="submit">Iscriviti all'evento</button>
+                    </form>
+                    <a class="primary-button" sec:authorize="!isAuthenticated()" th:href="@{/login}">Login per iscriverti</a>
+                    <a class="text-link" th:href="@{/eventi/{id}(id=${eventoSettimana.id})}">Vedi dettagli</a>
+                </div>
+            </article>
+
+            <article class="event-panel empty-event" th:if="${eventoSettimana == null}">
+                <img class="empty-logo" th:src="@{/images/IlPaiolo_logo.png}" alt="">
+                <h2>Nessun evento aperto questa settimana</h2>
+                <p>Il Paiolo sta preparando la prossima sfida. Intanto puoi dare un'occhiata agli eventi in programma.</p>
+                <a class="primary-button" th:href="@{/eventi}">Guarda gli eventi</a>
+            </article>
+        </section>
+
+        <section class="home-shortcuts" aria-label="Scopri Il Paiolo">
+            <a th:href="@{/tavoli}">
+                <span>Prenota</span>
+                <strong>Tavoli per gruppi</strong>
+            </a>
+            <a th:href="@{/eventi}">
+                <span>Partecipa</span>
+                <strong>Serate ed eventi</strong>
+            </a>
+            <a th:href="@{/giochi}">
+                <span>Esplora</span>
+                <strong>Giochi da provare</strong>
+            </a>
+        </section>
+    </main>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
