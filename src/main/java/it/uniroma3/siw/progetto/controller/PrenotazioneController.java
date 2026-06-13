@@ -5,6 +5,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import it.uniroma3.siw.progetto.model.Ruolo;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -45,20 +48,27 @@ public class PrenotazioneController {
         return "redirect:/prenotazioni/mie";
     }
 
-    // ──────────────────────────────────────────
-    // Le mie prenotazioni
-    // ──────────────────────────────────────────
-
+    /**
+     *
+     * @param principal
+     * @param model
+     * @return html della lista delle prenotazioni dell'utente loggato
+     *
+     * Se un utente ha permessi USER allora potrà vedere solamente le sue prenotazioni.
+     *
+     * Se un utente ha permessi ADMIN allora oltre alle sue prenotazioni potrà vedere anche le
+     * prenotazioni di tutti gli altri utenti (per questo motivo mettiamo anche: model.addAttribute("tutteLePrenotazioni", prenotazioneService.findAll());)
+     *
+     */
     @GetMapping("/mie")
     public String miePrenotazioni(Principal principal, Model model) {
         Utente utente = getUtenteLoggato(principal);
         model.addAttribute("prenotazioni", prenotazioneService.findByUtente(utente));
+        model.addAttribute("tutteLePrenotazioni", prenotazioneService.findAll());
+        model.addAttribute("isAdmin", Ruolo.ADMIN.equals(utente.getRuolo()));
         return "prenotazioni/lista";
     }
 
-    // ──────────────────────────────────────────
-    // UC4 - Nuova prenotazione
-    // ──────────────────────────────────────────
 
     @GetMapping("/nuova")
     public String formNuovaPrenotazione() {
@@ -101,9 +111,6 @@ public class PrenotazioneController {
         return "redirect:/prenotazioni/mie";
     }
 
-    // ──────────────────────────────────────────
-    // UC5 - Modifica prenotazione
-    // ──────────────────────────────────────────
 
     @GetMapping("/{id}/modifica")
     public String formModifica(@PathVariable Long id, Principal principal, Model model) {
@@ -129,9 +136,6 @@ public class PrenotazioneController {
         return "redirect:/prenotazioni/mie";
     }
 
-    // ──────────────────────────────────────────
-    // UC6 - Elimina prenotazione
-    // ──────────────────────────────────────────
 
     @PostMapping("/{id}/elimina")
     public String eliminaPrenotazione(@PathVariable Long id,
@@ -142,20 +146,4 @@ public class PrenotazioneController {
         redirectAttributes.addFlashAttribute("successo", "Prenotazione annullata.");
         return "redirect:/prenotazioni/mie";
     }
-
-    @GetMapping("/api/tavoli-disponibili")
-    @ResponseBody
-    public List<Tavolo> tavoliDisponibili(@RequestParam String data,
-                                          @RequestParam String oraInizio,
-                                          @RequestParam String oraFine,
-                                          @RequestParam int numeroPersone) {
-        return tavoloService.findDisponibili(
-                java.time.LocalDate.parse(data),
-                java.time.LocalTime.parse(oraInizio),
-                java.time.LocalTime.parse(oraFine),
-                numeroPersone
-        );
-    }
-
-
 }

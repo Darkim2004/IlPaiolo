@@ -31,6 +31,11 @@ public class PrenotazioneService {
     }
 
     @Transactional(readOnly = true)
+    public List<Prenotazione> findAll() {
+        return prenotazioneRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
     public List<Prenotazione> findByUtente(Utente utente) {
         return prenotazioneRepository.findByUtente(utente);
     }
@@ -40,7 +45,7 @@ public class PrenotazioneService {
     // ──────────────────────────────────────────
 
     @Transactional
-    public Prenotazione crea(Utente utente, Long tavoloId, Prenotazione dati) {
+    public void crea(Utente utente, Long tavoloId, Prenotazione dati) {
         Tavolo tavolo = tavoloRepository.findById(tavoloId)
                 .orElseThrow(() -> new EntityNotFoundException("Tavolo non trovato"));
 
@@ -48,7 +53,7 @@ public class PrenotazioneService {
 
         dati.setUtente(utente);
         dati.setTavolo(tavolo);
-        return prenotazioneRepository.save(dati);
+        prenotazioneRepository.save(dati);
     }
 
     // ──────────────────────────────────────────
@@ -90,7 +95,7 @@ public class PrenotazioneService {
             throw new SecurityException("Non puoi eliminare una prenotazione altrui");
 
         if (!prenotazione.getData().isAfter(LocalDate.now()))
-            throw new IllegalStateException("Puoi annullare solo prenotazioni future");
+            throw new IllegalStateException("Puoi annulla+re solo prenotazioni future");
 
         prenotazioneRepository.delete(prenotazione);
     }

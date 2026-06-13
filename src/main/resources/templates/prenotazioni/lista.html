@@ -8,11 +8,10 @@
 
 <nav>
     <a th:href="@{/}">Home</a>
-    <a th:href ="@{/admin/tavoli}">Tavoli</a>
+    <a th:href="@{/admin/tavoli}">Tavoli</a>
     <a th:href="@{/eventi}">Eventi</a>
     <a th:href="@{/giochi}">Giochi</a>
 </nav>
-
 
 <hr>
 
@@ -40,6 +39,7 @@
     <div th:if="${p.data.isAfter(#temporals.createToday())}">
         <a th:href="@{/prenotazioni/{id}/modifica(id=${p.id})}">Modifica</a>
         <form th:action="@{/prenotazioni/{id}/elimina(id=${p.id})}" method="post" style="display:inline">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
             <button type="submit" onclick="return confirm('Vuoi annullare questa prenotazione?')">Annulla</button>
         </form>
     </div>
@@ -47,6 +47,37 @@
 
 <hr>
 <a href="/prenotazioni/nuova">+ Nuova prenotazione</a>
+
+<!-- Sezione visibile solo agli admin -->
+<div th:if="${isAdmin}">
+    <hr>
+    <h2>Tutte le prenotazioni (Admin)</h2>
+
+    <p th:if="${#lists.isEmpty(tutteLePrenotazioni)}">Nessuna prenotazione nel sistema.</p>
+
+    <table th:unless="${#lists.isEmpty(tutteLePrenotazioni)}">
+        <thead>
+        <tr>
+            <th>Utente</th>
+            <th>Tavolo</th>
+            <th>Data</th>
+            <th>Orario</th>
+            <th>Persone</th>
+            <th>Note</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${tutteLePrenotazioni}">
+            <td th:text="${p.utente.nome + ' ' + p.utente.cognome}"></td>
+            <td th:text="'Tavolo ' + ${p.tavolo.numero}"></td>
+            <td th:text="${p.data}"></td>
+            <td th:text="${p.oraInizio + ' – ' + p.oraFine}"></td>
+            <td th:text="${p.numeroPersone}"></td>
+            <td th:text="${p.note != null ? p.note : '-'}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>

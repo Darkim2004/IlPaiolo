@@ -38,7 +38,7 @@ public class AuthController {
                                 BindingResult bindingResult, HttpServletRequest request) 
                                 throws ServletException {
         if (utente.getEmail() != null && !utente.getEmail().isBlank()
-            && this.utenteService.findByEmail(utente.getEmail()) != null) {
+            && this.utenteService.findByEmail(utente.getEmail()).isPresent()) {
                 bindingResult.rejectValue("email", "duplicate",
                                         "Email gia in uso");
         }
