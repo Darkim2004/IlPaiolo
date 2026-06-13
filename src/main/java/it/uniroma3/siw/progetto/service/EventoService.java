@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+
 @Service
 @Transactional
 public class EventoService {
@@ -43,6 +44,11 @@ public class EventoService {
     @Transactional(readOnly = true)
     public List<Evento> getEventiAperti() {
         return eventoRepository.findByStatoAndDataAfterOrderByDataAsc(StatoEvento.APERTO, LocalDate.now());
+    }
+
+    @Transactional(readOnly = true)
+    public long countEventiAperti() {
+        return eventoRepository.countByStatoAndDataGreaterThanEqual(StatoEvento.APERTO, LocalDate.now());
     }
 
     @Transactional(readOnly = true)
