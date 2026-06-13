@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Prenota un tavolo</title>
+</head>
+<body>
+
+<nav>
+    <a href="/home">Il Paiolo</a> |
+    <a href="/prenotazioni/mie">Le mie prenotazioni</a> |
+    <a href="/logout">Esci</a>
+</nav>
+
+<hr>
+
+<h1>Prenota un tavolo</h1>
+
+<form action="/prenotazioni/nuova/cerca" method="post">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+    <p>
+        <label>Data<br>
+            <input type="date" name="data" required>
+        </label>
+    </p>
+    <p>
+        <label>Ora inizio<br>
+            <input type="time" name="oraInizio" required>
+        </label>
+    </p>
+    <p>
+        <label>Ora fine<br>
+            <input type="time" name="oraFine" required>
+        </label>
+    </p>
+    <p>
+        <label>Numero persone<br>
+            <input type="number" name="numeroPersone" min="1" value="1" required>
+        </label>
+    </p>
+    <button type="submit">Cerca tavoli disponibili</button>
+</form>
+
+</body>
+</html>

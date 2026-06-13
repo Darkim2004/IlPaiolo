@@ -1,6 +1,8 @@
 package it.uniroma3.siw.progetto.controller;
 
 import java.security.Principal;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -38,6 +40,11 @@ public class PrenotazioneController {
                 .orElseThrow(() -> new EntityNotFoundException("Utente non trovato"));
     }
 
+    @GetMapping
+    public String index() {
+        return "redirect:/prenotazioni/mie";
+    }
+
     // ──────────────────────────────────────────
     // Le mie prenotazioni
     // ──────────────────────────────────────────
@@ -54,18 +61,42 @@ public class PrenotazioneController {
     // ──────────────────────────────────────────
 
     @GetMapping("/nuova")
-    public String formNuovaPrenotazione(Model model) {
-        model.addAttribute("prenotazione", new Prenotazione());
+    public String formNuovaPrenotazione() {
         return "prenotazioni/form";
     }
 
+    @PostMapping("/nuova/cerca")
+    public String cercaTavoli(@RequestParam LocalDate data,
+                              @RequestParam LocalTime oraInizio,
+                              @RequestParam LocalTime oraFine,
+                              @RequestParam int numeroPersone,
+                              Model model) {
+        List<Tavolo> tavoli = tavoloService.findDisponibili(data, oraInizio, oraFine, numeroPersone);
+        model.addAttribute("tavoli", tavoli);
+        model.addAttribute("data", data);
+        model.addAttribute("oraInizio", oraInizio);
+        model.addAttribute("oraFine", oraFine);
+        model.addAttribute("numeroPersone", numeroPersone);
+        return "prenotazioni/cerca";
+    }
+
     @PostMapping("/nuova")
-    public String creaPrenotazione(@ModelAttribute Prenotazione prenotazione,
-                                   @RequestParam Long tavoloId,
+    public String creaPrenotazione(@RequestParam Long tavoloId,
+                                   @RequestParam LocalDate data,
+                                   @RequestParam LocalTime oraInizio,
+                                   @RequestParam LocalTime oraFine,
+                                   @RequestParam int numeroPersone,
+                                   @RequestParam(required = false) String note,
                                    Principal principal,
                                    RedirectAttributes redirectAttributes) {
         Utente utente = getUtenteLoggato(principal);
-        prenotazioneService.crea(utente, tavoloId, prenotazione);
+        Prenotazione dati = new Prenotazione();
+        dati.setData(data);
+        dati.setOraInizio(oraInizio);
+        dati.setOraFine(oraFine);
+        dati.setNumeroPersone(numeroPersone);
+        dati.setNote(note);
+        prenotazioneService.crea(utente, tavoloId, dati);
         redirectAttributes.addFlashAttribute("successo", "Prenotazione effettuata con successo.");
         return "redirect:/prenotazioni/mie";
     }

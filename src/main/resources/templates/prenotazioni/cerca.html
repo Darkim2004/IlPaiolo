@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Scegli un tavolo</title>
+</head>
+<body>
+
+<nav>
+    <a href="/home">Il Paiolo</a> |
+    <a href="/prenotazioni/mie">Le mie prenotazioni</a> |
+    <a href="/logout">Esci</a>
+</nav>
+
+<hr>
+
+<h1>Tavoli disponibili</h1>
+
+<p>
+    Data: <strong th:text="${data}"></strong> |
+    Orario: <strong th:text="${oraInizio} + ' – ' + ${oraFine}"></strong> |
+    Persone: <strong th:text="${numeroPersone}"></strong>
+</p>
+
+<p th:if="${#lists.isEmpty(tavoli)}">
+    Nessun tavolo disponibile per questa fascia oraria.
+    <a href="/prenotazioni/nuova">Riprova</a>
+</p>
+
+<div th:each="t : ${tavoli}">
+    <form action="/prenotazioni/nuova" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        <input type="hidden" name="tavoloId" th:value="${t.id}">
+        <input type="hidden" name="data" th:value="${data}">
+        <input type="hidden" name="oraInizio" th:value="${oraInizio}">
+        <input type="hidden" name="oraFine" th:value="${oraFine}">
+        <input type="hidden" name="numeroPersone" th:value="${numeroPersone}">
+
+        <p>
+            <strong>Tavolo <span th:text="${t.numero}"></span></strong>
+            <span th:if="${t.nome != null}"> · <span th:text="${t.nome}"></span></span>
+            · <span th:text="${t.capienza}"></span> posti
+            · <span th:text="${t.posizione}"></span>
+        </p>
+        <p>
+            <label>Note (opzionale)<br>
+                <textarea name="note" rows="2"></textarea>
+            </label>
+        </p>
+        <button type="submit">Prenota questo tavolo</button>
+    </form>
+    <hr>
+</div>
+
+<a href="/prenotazioni/nuova">← Torna indietro</a>
+
+</body>
+</html>
