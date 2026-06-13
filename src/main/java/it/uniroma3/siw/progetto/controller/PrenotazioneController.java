@@ -110,13 +110,12 @@ public class PrenotazioneController {
         Utente utente = getUtenteLoggato(principal);
         Prenotazione prenotazione = prenotazioneService.findById(id);
 
-        // Controllo ownership già nel service, ma verifichiamo prima di mostrare il form
         if (!prenotazione.getUtente().getId().equals(utente.getId())) {
             return "redirect:/prenotazioni/mie";
         }
 
         model.addAttribute("prenotazione", prenotazione);
-        return "prenotazioni/form-modifica";
+        return "prenotazioni/modifica";
     }
 
     @PostMapping("/{id}/modifica")
@@ -144,10 +143,6 @@ public class PrenotazioneController {
         return "redirect:/prenotazioni/mie";
     }
 
-    // ──────────────────────────────────────────
-    // API REST per React (UC4 - tavoli disponibili)
-    // ──────────────────────────────────────────
-
     @GetMapping("/api/tavoli-disponibili")
     @ResponseBody
     public List<Tavolo> tavoliDisponibili(@RequestParam String data,
@@ -161,4 +156,6 @@ public class PrenotazioneController {
                 numeroPersone
         );
     }
+
+
 }
