@@ -4,8 +4,6 @@ import it.uniroma3.siw.progetto.model.Evento;
 import it.uniroma3.siw.progetto.model.StatoEvento;
 import it.uniroma3.siw.progetto.service.EventoService;
 
-import it.uniroma3.siw.progetto.service.EventoService;
-
 import java.security.Principal;
 import java.util.List;
 
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
