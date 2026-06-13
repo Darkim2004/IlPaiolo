@@ -24,6 +24,10 @@ public class GiocoService {
         return (List<Gioco>)giocoRepository.findAll();
     }
 
+    public int count() {
+        return (int) giocoRepository.count();
+    }
+
     public Gioco findById(Long id) {
         return giocoRepository.findById(id).orElse(null);
     }

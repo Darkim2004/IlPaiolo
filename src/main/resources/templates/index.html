@@ -42,6 +42,17 @@
                     Entra nel Paiolo, scegli la tua squadra e preparati a una serata di giochi,
                     brindisi e sfide leggere.
                 </p>
+
+                <div class="home-counters" aria-label="Numeri del locale">
+                    <a class="counter-card" th:href="@{/giochi}">
+                        <strong th:text="${numeroGiochi}">48</strong>
+                        <span>Giochi nel pub</span>
+                    </a>
+                    <a class="counter-card" th:href="@{/eventi}">
+                        <strong th:text="${numeroEventi}">6</strong>
+                        <span>Eventi in programma</span>
+                    </a>
+                </div>
             </div>
 
             <article class="event-panel" th:if="${eventoSettimana != null}">
@@ -98,6 +109,18 @@
             </article>
         </section>
 
+        <section class="reservation-callout" aria-labelledby="prenota-tavolo-title">
+            <div class="reservation-content">
+                <p class="eyebrow">Serata con il tuo gruppo</p>
+                <h2 id="prenota-tavolo-title">Prenota un tavolo</h2>
+                <p>
+                    Blocca il posto per la prossima partita: tavoli piccoli per due,
+                    tavolate per gruppi e giochi pronti da scegliere appena arrivi.
+                </p>
+                <a class="primary-button reservation-button" th:href="@{/tavoli}">Prenota un tavolo</a>
+            </div>
+        </section>
+
         <section class="home-shortcuts" aria-label="Scopri Il Paiolo">
             <a th:href="@{/tavoli}">
                 <span>Prenota</span>
@@ -111,6 +134,28 @@
                 <span>Esplora</span>
                 <strong>Giochi da provare</strong>
             </a>
+        </section>
+
+        <section class="general-info" aria-labelledby="informazioni-title">
+            <div>
+                <p class="eyebrow">Informazioni</p>
+                <h2 id="informazioni-title">Trova Il Paiolo</h2>
+            </div>
+
+            <div class="info-grid">
+                <article class="info-item">
+                    <span class="detail-label">Indirizzo</span>
+                    <p>Via dei Calderai 17<br>00153 Roma</p>
+                </article>
+                <article class="info-item">
+                    <span class="detail-label">Orari</span>
+                    <p>Mar-Gio 17:00 - 00:00<br>Ven-Sab 17:00 - 02:00<br>Dom 16:00 - 23:00</p>
+                </article>
+                <article class="info-item">
+                    <span class="detail-label">Telefono</span>
+                    <p><a href="tel:+390655501842">+39 06 5550 1842</a></p>
+                </article>
+            </div>
         </section>
     </main>
 </body>
