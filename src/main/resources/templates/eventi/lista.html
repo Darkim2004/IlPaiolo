@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>Eventi</title>
 </head>
 <body>
 
 <h1>Eventi in programma</h1>
+
+<a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/eventi/new}">Crea evento</a>
 
 <div th:if="${#lists.isEmpty(eventi)}">
     <p>Nessun evento disponibile al momento.</p>
@@ -19,6 +21,21 @@
         <span th:text="${evento.numeroMaxPartecipanti - evento.iscrizioni.size()}"></span>
     </p>
     <a th:href="@{/eventi/{id}(id=${evento.id})}">Dettaglio</a>
+
+    <form sec:authorize="isAuthenticated()"
+          th:if="${iscrizioniUtente == null or !iscrizioniUtente.contains(evento.id)}"
+          th:action="@{/eventi/{id}/iscriviti(id=${evento.id})}"
+          method="post">
+        <button type="submit">Iscriviti</button>
+    </form>
+    <p sec:authorize="isAuthenticated()"
+       th:if="${iscrizioniUtente != null and iscrizioniUtente.contains(evento.id)}">
+        Sei già iscritto
+    </p>
+    <a sec:authorize="!isAuthenticated()" th:href="@{/login}">Login per iscriverti</a>
+
+    <a sec:authorize="hasRole('ADMIN')"
+       th:href="@{/eventi/{id}/iscrizioni(id=${evento.id})}">Gestisci iscrizioni</a>
 </div>
 
 </body>
