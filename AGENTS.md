@@ -20,6 +20,13 @@ Use the Maven wrapper included in the repository:
 - `.\mvnw.cmd spring-boot:run` starts the local application on port `8080`.
 - `.\mvnw.cmd clean package` compiles, tests, and builds the packaged artifact in `target/`.
 
+Codex note for this Windows workspace: `.\mvnw.cmd` may fail in PowerShell with `Cannot start maven from wrapper`. Use the Maven distribution already unpacked by the wrapper:
+
+- `& "$HOME\.m2\wrapper\dists\apache-maven-3.9.14\ed7edd442f634ac1c1ef5ba2b61b6d690b5221091f1a8e1123f5fadcc967520d\bin\mvn.cmd" test`
+- `& "$HOME\.m2\wrapper\dists\apache-maven-3.9.14\ed7edd442f634ac1c1ef5ba2b61b6d690b5221091f1a8e1123f5fadcc967520d\bin\mvn.cmd" spring-boot:run "-Dspring-boot.run.arguments=--server.port=8080"`
+
+If the Spring Boot run command tries to download dependencies and fails with Maven Central permission/network errors in the Codex sandbox, rerun the same command with escalation. Once started, open `http://localhost:8080/`. Use another port by changing the final argument, for example `--server.port=8081`.
+
 The app expects PostgreSQL at `jdbc:postgresql://localhost:5432/ilPaiolo` with credentials configured in `src/main/resources/application.properties`.
 
 ## Coding Style & Naming Conventions
