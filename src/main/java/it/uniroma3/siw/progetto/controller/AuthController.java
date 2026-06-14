@@ -47,6 +47,9 @@ public class AuthController {
         }
         String rawPassword = utente.getPassword();
         this.utenteService.save(utente);
+        if (request.getUserPrincipal() != null) {
+            request.logout();
+        }
         request.login(utente.getEmail(), rawPassword);
         return "redirect:/";
     }
