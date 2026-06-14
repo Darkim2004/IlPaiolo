@@ -1,40 +1,15 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${gioco.id == null ? 'Nuovo gioco - Il Paiolo' : 'Modifica gioco - Il Paiolo'}">Form gioco</title>
-    <link rel="stylesheet" th:href="@{/css/home.css}">
-</head>
+<head th:replace="~{componenti :: head(${gioco.id == null ? 'Nuovo gioco - Il Paiolo' : 'Modifica gioco - Il Paiolo'})}"></head>
 <body>
-    <header class="site-header">
-        <nav class="navbar" aria-label="Navigazione principale">
-            <a class="brand" th:href="@{/}">
-                <img class="brand-logo" th:src="@{/images/IlPaiolo_logo.png}" alt="Logo Il Paiolo">
-                <span class="brand-name">Il Paiolo</span>
-            </a>
-
-            <div class="nav-links">
-                <a th:href="@{/tavoli}">Tavoli</a>
-                <a th:href="@{/eventi}">Eventi</a>
-                <a th:href="@{/giochi}">Giochi</a>
-            </div>
-
-            <div class="nav-auth">
-                <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">
-                    <input th:replace="~{componenti :: csrfInput}">
-                    <button class="ghost-button" type="submit">Esci</button>
-                </form>
-            </div>
-        </nav>
-    </header>
+    <header th:replace="~{componenti :: siteHeader(@{/login}, 'Login')}"></header>
 
     <main>
         <section class="page-hero" aria-labelledby="form-gioco-title">
             <div>
                 <p class="eyebrow">Area admin</p>
                 <h1 id="form-gioco-title" th:text="${gioco.id == null ? 'Nuovo gioco' : 'Modifica gioco'}">Form gioco</h1>
-                <p class="intro">Aggiorna i dati della libreria mantenendo chiare disponibilita, categorie e dettagli utili ai giocatori.</p>
+                <p class="intro">Aggiorna i dati della libreria mantenendo chiare disponibilita', categorie e dettagli utili ai giocatori.</p>
             </div>
         </section>
 
@@ -65,7 +40,7 @@
                 </div>
 
                 <div class="form-field">
-                    <label for="difficolta">Difficolta</label>
+                    <label for="difficolta">Difficolta'</label>
                     <input id="difficolta" type="text" th:field="*{difficolta}">
                     <span class="field-error" th:if="${#fields.hasErrors('difficolta')}" th:errors="*{difficolta}">Errore difficolta</span>
                 </div>

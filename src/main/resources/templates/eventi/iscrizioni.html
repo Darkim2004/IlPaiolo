@@ -1,32 +1,80 @@
 <!DOCTYPE html>
-<html lang="it" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Iscrizioni evento</title>
-</head>
+<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{componenti :: head('Iscrizioni evento - Il Paiolo')}"></head>
 <body>
-    <h1 th:text="${evento.nome}"></h1>
-    <p th:text="${evento.data}"></p>
+    <header th:replace="~{componenti :: siteHeader(@{/login}, 'Login')}"></header>
 
-    <h2>Iscritti</h2>
-    <table>
-        <tr>
-            <th>Nome</th>
-            <th>Cognome</th>
-            <th>Data iscrizione</th>
-            <th>Azioni</th>
-        </tr>
-        <tr th:each="iscrizione : ${iscrizioni}">
-            <td th:text="${iscrizione.utente.nome}"></td>
-            <td th:text="${iscrizione.utente.cognome}"></td>
-            <td th:text="${iscrizione.dataIscrizione}"></td>
-            <td>
-                <form th:action="@{/admin/iscrizioni/{id}/delete(id=${iscrizione.id})}" method="post">
-                    <input type="hidden" name="eventoId" th:value="${evento.id}">
-                    <button type="submit">Elimina</button>
+    <main>
+        <section class="page-hero" aria-labelledby="iscrizioni-title">
+            <div>
+                <p class="eyebrow">Area admin</p>
+                <h1 id="iscrizioni-title" th:text="${evento.nome}">Iscrizioni evento</h1>
+                <p class="intro">
+                    <span th:text="${#temporals.format(evento.data, 'dd/MM/yyyy')}">20/06/2026</span>
+                    <span>alle</span>
+                    <span th:text="${#temporals.format(evento.oraInizio, 'HH:mm')}">20:30</span>
+                </p>
+            </div>
+            <a class="ghost-button" th:href="@{/eventi/{id}(id=${evento.id})}">Dettaglio evento</a>
+        </section>
+
+        <section class="admin-section event-panel">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">Stato evento</p>
+                    <h2>Gestione serata</h2>
+                </div>
+                <form class="inline-actions" th:action="@{/admin/eventi/{id}/stato(id=${evento.id})}" method="post">
+                    <input th:replace="~{componenti :: csrfInput}">
+                    <select name="stato" aria-label="Stato evento">
+                        <option value="APERTO" th:selected="${evento.stato.name() == 'APERTO'}">Aperto</option>
+                        <option value="CHIUSO" th:selected="${evento.stato.name() == 'CHIUSO'}">Chiuso</option>
+                        <option value="ANNULLATO" th:selected="${evento.stato.name() == 'ANNULLATO'}">Annullato</option>
+                        <option value="COMPLETATO" th:selected="${evento.stato.name() == 'COMPLETATO'}">Completato</option>
+                    </select>
+                    <button class="primary-button" type="submit">Aggiorna</button>
                 </form>
-            </td>
-        </tr>
-    </table>
+            </div>
+        </section>
+
+        <section class="admin-section event-panel">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">Partecipanti</p>
+                    <h2>Iscritti</h2>
+                </div>
+                <span class="status-badge" th:text="|${#lists.size(iscrizioni)} iscritti|">0 iscritti</span>
+            </div>
+
+            <p class="muted" th:if="${#lists.isEmpty(iscrizioni)}">Non ci sono iscrizioni per questo evento.</p>
+
+            <div class="data-table-wrap" th:unless="${#lists.isEmpty(iscrizioni)}">
+                <table class="data-table">
+                    <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Cognome</th>
+                        <th>Data iscrizione</th>
+                        <th>Azioni</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="iscrizione : ${iscrizioni}">
+                        <td th:text="${iscrizione.utente.nome}">Nome</td>
+                        <td th:text="${iscrizione.utente.cognome}">Cognome</td>
+                        <td th:text="${#temporals.format(iscrizione.dataIscrizione, 'dd/MM/yyyy HH:mm')}">20/06/2026 19:10</td>
+                        <td>
+                            <form class="table-actions" th:action="@{/admin/iscrizioni/{id}/delete(id=${iscrizione.id})}" method="post">
+                                <input th:replace="~{componenti :: csrfInput}">
+                                <input type="hidden" name="eventoId" th:value="${evento.id}">
+                                <button class="danger-button" type="submit">Elimina</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
 </body>
 </html>

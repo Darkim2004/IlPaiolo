@@ -38,8 +38,11 @@ public class EventoController {
     }
 
     @GetMapping("/eventi/{id}")
-    public String dettaglioEvento(@PathVariable Long id, Model model) {
+    public String dettaglioEvento(@PathVariable Long id, Model model, Principal principal) {
         model.addAttribute("evento", eventoService.getEventoById(id));
+        if (principal != null) {
+            model.addAttribute("iscrizioniUtente", eventoService.getEventiIscrittoByEmail(principal.getName()));
+        }
         return "eventi/dettaglio";
     }
 

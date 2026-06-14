@@ -1,5 +1,7 @@
 package it.uniroma3.siw.progetto.controller;
 
+import it.uniroma3.siw.progetto.service.UtenteService;
+
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -8,22 +10,49 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 /**
- * Per far modo che lo username sia sempre disponibile ai template possiamo definire una classe con
- * annotazione @ControllerAdvice che definisce un metodo con annotazione @ModelAttribute("userDetails")
- * che restituisce l'oggetto UserDetails dell'utente autenticato, se presente, altrimenti null.
+ * Per far modo che i dati dell'utente autenticato siano sempre disponibili ai template possiamo
+ * definire una classe con annotazione @ControllerAdvice che espone attributi globali del model.
  * In questo modo, nei template Thymeleaf,
- * possiamo accedere all'oggetto userDetails per visualizzare lo username o altre informazioni dell'utente autenticato.
+ * possiamo accedere all'oggetto userDetails e al nome visualizzato nell'header.
  */
 @ControllerAdvice
 public class GlobalController {
 
-    @ModelAttribute("userDetails")
-    public UserDetails getUser() {
-        UserDetails user = null;
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!(authentication instanceof AnonymousAuthenticationToken)) {
-            user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        }
-        return user;
-    }
+	private final UtenteService utenteService;
+
+	public GlobalController(UtenteService utenteService) {
+		this.utenteService = utenteService;
+	}
+
+	@ModelAttribute("userDetails")
+	public UserDetails getUser() {
+		return getAuthenticatedUserDetails();
+	}
+
+	@ModelAttribute("nomeUtente")
+	public String getNomeUtente() {
+		UserDetails userDetails = getAuthenticatedUserDetails();
+		if (userDetails == null) {
+			return null;
+		}
+
+		String email = userDetails.getUsername();
+		return this.utenteService.findByEmail(email)
+				.map(utente -> utente.getNome() != null && !utente.getNome().isBlank() ? utente.getNome() : email)
+				.orElse(email);
+	}
+
+	private UserDetails getAuthenticatedUserDetails() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
+			return null;
+		}
+
+		Object principal = authentication.getPrincipal();
+		if (principal instanceof UserDetails userDetails) {
+			return userDetails;
+		}
+
+		return null;
+	}
 }

@@ -1,38 +1,8 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Il Paiolo</title>
-    <link rel="stylesheet" th:href="@{/css/home.css}">
-</head>
+<head th:replace="~{componenti :: head('Il Paiolo')}"></head>
 <body>
-     <header class="site-header">
-        <nav class="navbar" aria-label="Navigazione principale">
-            <a class="brand" th:href="@{/}">
-                <img class="brand-logo" th:src="@{/images/IlPaiolo_logo.png}" alt="Logo Il Paiolo">
-                <span class="brand-name">Il Paiolo</span>
-            </a>
-
-            <div class="nav-links">
-                <a th:href ="@{/prenotazioni}">Prenotazioni</a>
-                <a th:href="@{/admin/tavoli}">Tavoli</a>
-                <a th:href="@{/eventi}">Eventi</a>
-                <a th:href="@{/giochi}">Giochi</a>
-            </div>
-
-            <div class="nav-auth">
-                <a class="login-button" sec:authorize="!isAuthenticated()" th:href="@{/login}">Login</a>
-                <div class="user-area" sec:authorize="isAuthenticated()">
-                    <span class="user-greeting">Ciao <strong th:text="${nomeUtente}">Giocatore</strong></span>
-                    <form th:action="@{/logout}" method="post">
-                        <input th:replace="~{componenti :: csrfInput}">
-                        <button class="ghost-button" type="submit">Esci</button>
-                    </form>
-                </div>
-            </div>
-        </nav>
-    </header>
+    <header th:replace="~{componenti :: siteHeader(@{/login}, 'Login')}"></header>
 
     <main>
         <section class="weekly-event" aria-labelledby="evento-settimana-title">
@@ -118,12 +88,12 @@
                     Blocca il posto per la prossima partita: tavoli piccoli per due,
                     tavolate per gruppi e giochi pronti da scegliere appena arrivi.
                 </p>
-                <a class="primary-button reservation-button" th:href="@{/tavoli}">Prenota un tavolo</a>
+                <a class="primary-button reservation-button" th:href="@{/prenotazioni/nuova}">Prenota un tavolo</a>
             </div>
         </section>
 
         <section class="home-shortcuts" aria-label="Scopri Il Paiolo">
-            <a th:href="@{/tavoli}">
+            <a th:href="@{/prenotazioni/nuova}">
                 <span>Prenota</span>
                 <strong>Tavoli per gruppi</strong>
             </a>

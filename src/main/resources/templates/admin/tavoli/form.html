@@ -1,59 +1,57 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Nuovo tavolo</title>
-</head>
+<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{componenti :: head('Nuovo tavolo - Il Paiolo')}"></head>
 <body>
+    <header th:replace="~{componenti :: siteHeader(@{/login}, 'Login')}"></header>
 
-<nav>
-    <a th:href="@{/}">Home</a>
-    <a th:href ="@{/prenotazioni}">Prenotazioni</a>
-    <a th:href="@{/eventi}">Eventi</a>
-    <a th:href="@{/giochi}">Giochi</a>
-</nav>
+    <main>
+        <section class="page-hero" aria-labelledby="nuovo-tavolo-title">
+            <div>
+                <p class="eyebrow">Area admin</p>
+                <h1 id="nuovo-tavolo-title">Nuovo tavolo</h1>
+                <p class="intro">Aggiungi un tavolo prenotabile indicando capienza, posizione e disponibilita'.</p>
+            </div>
+        </section>
 
-<hr>
+        <form class="game-form event-panel" th:action="@{/admin/tavoli/nuovo}" th:object="${tavolo}" method="post">
+            <input th:replace="~{componenti :: csrfInput}">
 
-<h1>Nuovo tavolo</h1>
+            <div class="form-grid">
+                <div class="form-field">
+                    <label for="numero">Numero</label>
+                    <input id="numero" type="number" min="1" th:field="*{numero}" required>
+                </div>
 
-<form action="/admin/tavoli/nuovo" method="post">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <div class="form-field">
+                    <label for="nome">Nome opzionale</label>
+                    <input id="nome" type="text" th:field="*{nome}">
+                </div>
 
-    <p>
-        <label>Numero<br>
-            <input type="number" name="numero" min="1" required>
-        </label>
-    </p>
-    <p>
-        <label>Nome (opzionale)<br>
-            <input type="text" name="nome">
-        </label>
-    </p>
-    <p>
-        <label>Capienza<br>
-            <input type="number" name="capienza" min="1" required>
-        </label>
-    </p>
-    <p>
-        <label>Posizione<br>
-            <select name="posizione" required>
-                <option value="">-- Seleziona --</option>
-                <option value="INTERNO">Interno</option>
-                <option value="ESTERNO">Esterno</option>
-            </select>
-        </label>
-    </p>
-    <p>
-        <label>
-            <input type="checkbox" name="disponibile" value="true" checked>
-            Disponibile
-        </label>
-    </p>
+                <div class="form-field">
+                    <label for="capienza">Capienza</label>
+                    <input id="capienza" type="number" min="1" th:field="*{capienza}" required>
+                </div>
 
-    <button type="submit">Crea tavolo</button>
-    <a href="/admin/tavoli">Annulla</a>
-</form>
+                <div class="form-field">
+                    <label for="posizione">Posizione</label>
+                    <select id="posizione" th:field="*{posizione}" required>
+                        <option value="">Seleziona</option>
+                        <option value="INTERNO">Interno</option>
+                        <option value="ESTERNO">Esterno</option>
+                    </select>
+                </div>
 
+                <label class="checkbox-item form-field-wide">
+                    <input type="checkbox" th:field="*{disponibile}">
+                    <span>Disponibile per nuove prenotazioni</span>
+                </label>
+            </div>
+
+            <div class="form-actions">
+                <button class="primary-button" type="submit">Crea tavolo</button>
+                <a class="ghost-button" th:href="@{/admin/tavoli}">Annulla</a>
+            </div>
+        </form>
+    </main>
 </body>
 </html>

@@ -1,42 +1,77 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <title>Eventi</title>
-</head>
+<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{componenti :: head('Eventi - Il Paiolo')}"></head>
 <body>
+    <header th:replace="~{componenti :: siteHeader(@{/login}, 'Login')}"></header>
 
-<h1>Eventi in programma</h1>
+    <main>
+        <section class="page-hero" aria-labelledby="eventi-title">
+            <div>
+                <p class="eyebrow">Calendario del pub</p>
+                <h1 id="eventi-title">Eventi in programma</h1>
+                <p class="intro">Serate guidate, tornei leggeri e tavoli aperti per trovare nuovi compagni di gioco.</p>
+            </div>
+            <a class="primary-button" sec:authorize="hasRole('ADMIN')" th:href="@{/admin/eventi/new}">Crea evento</a>
+        </section>
 
-<a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/eventi/new}">Crea evento</a>
+        <th:block th:if="${#lists.isEmpty(eventi)}">
+            <section th:replace="~{componenti :: emptyPanel('Nessun evento disponibile', 'Il calendario verra aggiornato appena ci saranno nuove serate aperte.')}"></section>
+        </th:block>
 
-<div th:if="${#lists.isEmpty(eventi)}">
-    <p>Nessun evento disponibile al momento.</p>
-</div>
+        <section class="event-grid" th:if="${!#lists.isEmpty(eventi)}" aria-label="Lista eventi">
+            <article class="event-card event-panel" th:each="evento : ${eventi}">
+                <div class="event-card-header">
+                    <p class="event-date">
+                        <span th:text="${#temporals.format(evento.data, 'dd/MM/yyyy')}">20/06/2026</span>
+                        <span th:text="${#temporals.format(evento.oraInizio, 'HH:mm') + ' - ' + #temporals.format(evento.oraFine, 'HH:mm')}">20:30 - 23:30</span>
+                    </p>
+                    <span class="status-badge" th:text="${evento.stato}">APERTO</span>
+                </div>
 
-<div th:each="evento : ${eventi}">
-    <h2 th:text="${evento.nome}"></h2>
-    <p th:text="${evento.data}"></p>
-    <p th:text="${evento.oraInizio} + ' - ' + ${evento.oraFine}"></p>
-    <p>Posti disponibili:
-        <span th:text="${evento.numeroMaxPartecipanti - evento.iscrizioni.size()}"></span>
-    </p>
-    <a th:href="@{/eventi/{id}(id=${evento.id})}">Dettaglio</a>
+                <h2 th:text="${evento.nome}">Nome evento</h2>
+                <p class="event-description" th:text="${evento.descrizione != null and !#strings.isEmpty(evento.descrizione) ? evento.descrizione : 'Dettagli in aggiornamento.'}">
+                    Dettagli evento
+                </p>
 
-    <form sec:authorize="isAuthenticated()"
-          th:if="${iscrizioniUtente == null or !iscrizioniUtente.contains(evento.id)}"
-          th:action="@{/eventi/{id}/iscriviti(id=${evento.id})}"
-          method="post">
-        <button type="submit">Iscriviti</button>
-    </form>
-    <p sec:authorize="isAuthenticated()"
-       th:if="${iscrizioniUtente != null and iscrizioniUtente.contains(evento.id)}">
-        Sei già iscritto
-    </p>
-    <a sec:authorize="!isAuthenticated()" th:href="@{/login}">Login per iscriverti</a>
+                <div class="summary-grid">
+                    <div>
+                        <span class="detail-label">Posti liberi</span>
+                        <strong th:text="${evento.numeroMaxPartecipanti - evento.iscrizioni.size()}">12</strong>
+                    </div>
+                    <div>
+                        <span class="detail-label">Costo</span>
+                        <strong th:text="${evento.costoPartecipazione != null and evento.costoPartecipazione.signum() > 0 ? evento.costoPartecipazione + ' euro' : 'Gratis'}">Gratis</strong>
+                    </div>
+                </div>
 
-    <a sec:authorize="hasRole('ADMIN')"
-       th:href="@{/eventi/{id}/iscrizioni(id=${evento.id})}">Gestisci iscrizioni</a>
-</div>
+                <div class="game-list" th:if="${evento.giochi != null and !evento.giochi.isEmpty()}">
+                    <span th:each="gioco : ${evento.giochi}" th:text="${gioco.titolo}">Dixit</span>
+                </div>
 
+                <div class="card-actions">
+                    <a class="primary-button" th:href="@{/eventi/{id}(id=${evento.id})}">Dettaglio</a>
+
+                    <form sec:authorize="isAuthenticated()"
+                          th:if="${iscrizioniUtente == null or !iscrizioniUtente.contains(evento.id)}"
+                          th:action="@{/eventi/{id}/iscriviti(id=${evento.id})}"
+                          method="post">
+                        <input th:replace="~{componenti :: csrfInput}">
+                        <button class="ghost-button" type="submit">Iscriviti</button>
+                    </form>
+
+                    <form sec:authorize="isAuthenticated()"
+                          th:if="${iscrizioniUtente != null and iscrizioniUtente.contains(evento.id)}"
+                          th:action="@{/eventi/{id}/annulla(id=${evento.id})}"
+                          method="post">
+                        <input th:replace="~{componenti :: csrfInput}">
+                        <button class="ghost-button" type="submit">Annulla iscrizione</button>
+                    </form>
+
+                    <a class="text-link" sec:authorize="!isAuthenticated()" th:href="@{/login}">Login per iscriverti</a>
+                    <a class="text-link" sec:authorize="hasRole('ADMIN')" th:href="@{/eventi/{id}/iscrizioni(id=${evento.id})}">Gestisci iscrizioni</a>
+                </div>
+            </article>
+        </section>
+    </main>
 </body>
 </html>

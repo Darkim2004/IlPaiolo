@@ -1,57 +1,91 @@
 <!DOCTYPE html>
-<html lang="it" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form eventi admin </title>
-</head>
+<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{componenti :: head('Nuovo evento - Il Paiolo')}"></head>
 <body>
-    <div class="container">
-        <form th:object="${evento}"
-              th:action="@{'/admin/eventi/save'}"
+    <header th:replace="~{componenti :: siteHeader(@{/login}, 'Login')}"></header>
+
+    <main>
+        <section class="page-hero" aria-labelledby="form-evento-title">
+            <div>
+                <p class="eyebrow">Area admin</p>
+                <h1 id="form-evento-title">Nuovo evento</h1>
+                <p class="intro">Crea una serata con orari, posti disponibili e giochi da proporre ai tavoli.</p>
+            </div>
+        </section>
+
+        <form class="game-form event-panel"
+              th:object="${evento}"
+              th:action="@{/admin/eventi/save}"
               method="post">
+            <input th:replace="~{componenti :: csrfInput}">
             <input type="hidden" th:field="*{id}">
-            <div class="field">
-                <label>Nome</label>
-                <input type="text" th:field="*{nome}">
-            </div>
-            <div class="field">
-                <label>Descrizione</label>
-                <input type="text" th:field="*{descrizione}">
-            </div>
-            <div class="field">
-                <label>Data</label>
-                <input type="date" th:field="*{data}">
-            </div>
-            <div class="field">
-                <label>Ora inizio</label>
-                <input type="time" th:field="*{oraInizio}">
-            </div>
-            <div class="field">
-                <label>Ora fine</label>
-                <input type="time" th:field="*{oraFine}">
-            </div>
-        <div class="field">
-            <label>Giochi</label>
-            <div th:each="gioco : ${giochi}">
-                <input type="checkbox" 
-                    name="giochiIds" 
-                    th:value="${gioco.id}" 
-                    th:id="${'gioco-' + gioco.id}">
-                <label th:for="${'gioco-' + gioco.id}" th:text="${gioco.titolo}"></label>
-            </div>
-        </div>
-            <div class="field">
-                <label>Numero max partecipanti</label>
-                <input type="number" th:field="*{numeroMaxPartecipanti}">
-            </div>
-            <div class="field">
-                <label>Costo partecipazione</label>
-                <input type="number" step="0.01" th:field="*{costoPartecipazione}">
+
+            <div class="form-grid">
+                <div class="form-field form-field-wide">
+                    <label for="nome">Nome</label>
+                    <input id="nome" type="text" th:field="*{nome}" required>
+                </div>
+
+                <div class="form-field form-field-wide">
+                    <label for="descrizione">Descrizione</label>
+                    <textarea id="descrizione" rows="4" th:field="*{descrizione}"></textarea>
+                </div>
+
+                <div class="form-field">
+                    <label for="data">Data</label>
+                    <input id="data" type="date" th:field="*{data}" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="oraInizio">Ora inizio</label>
+                    <input id="oraInizio" type="time" th:field="*{oraInizio}" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="oraFine">Ora fine</label>
+                    <input id="oraFine" type="time" th:field="*{oraFine}" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="numeroMaxPartecipanti">Numero max partecipanti</label>
+                    <input id="numeroMaxPartecipanti" type="number" min="1" th:field="*{numeroMaxPartecipanti}" required>
+                </div>
+
+                <div class="form-field">
+                    <label for="costoPartecipazione">Costo partecipazione</label>
+                    <input id="costoPartecipazione" type="number" min="0" step="0.01" th:field="*{costoPartecipazione}">
+                </div>
+
+                <div class="form-field">
+                    <label for="stato">Stato</label>
+                    <select id="stato" th:field="*{stato}">
+                        <option value="APERTO">Aperto</option>
+                        <option value="CHIUSO">Chiuso</option>
+                        <option value="ANNULLATO">Annullato</option>
+                        <option value="COMPLETATO">Completato</option>
+                    </select>
+                </div>
+
+                <fieldset class="form-field form-field-wide checkbox-field">
+                    <legend>Giochi</legend>
+                    <p class="muted" th:if="${#lists.isEmpty(giochi)}">Nessun gioco disponibile per questo evento.</p>
+                    <div class="checkbox-list" th:if="${!#lists.isEmpty(giochi)}">
+                        <label class="checkbox-item" th:each="gioco : ${giochi}" th:for="${'gioco-' + gioco.id}">
+                            <input type="checkbox"
+                                   name="giochiIds"
+                                   th:value="${gioco.id}"
+                                   th:id="${'gioco-' + gioco.id}">
+                            <span th:text="${gioco.titolo}">Gioco</span>
+                        </label>
+                    </div>
+                </fieldset>
             </div>
 
-            <button type="submit" class="btn primary">Salva</button>
+            <div class="form-actions">
+                <button class="primary-button" type="submit">Salva</button>
+                <a class="ghost-button" th:href="@{/eventi}">Annulla</a>
+            </div>
         </form>
-    </div>
+    </main>
 </body>
 </html>

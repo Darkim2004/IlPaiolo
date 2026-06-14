@@ -1,9 +1,21 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Errore</title></head>
+<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{componenti :: head('Richiesta non valida - Il Paiolo')}"></head>
 <body>
-<h1>Richiesta non valida</h1>
-<p th:text="${messaggio}"></p>
-<a href="/prenotazioni/nuova">Torna indietro</a>
+    <header th:replace="~{componenti :: siteHeader(@{/login}, 'Login')}"></header>
+
+    <main>
+        <section class="error-page event-panel">
+            <p class="eyebrow">Errore</p>
+            <h1>Richiesta non valida</h1>
+            <p class="intro" th:text="${messaggio != null ? messaggio : 'Non siamo riusciti a completare la richiesta.'}">
+                Non siamo riusciti a completare la richiesta.
+            </p>
+            <div class="form-actions">
+                <a class="primary-button" th:href="@{/prenotazioni/nuova}">Nuova prenotazione</a>
+                <a class="ghost-button" th:href="@{/}">Home</a>
+            </div>
+        </section>
+    </main>
 </body>
 </html>

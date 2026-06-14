@@ -1,31 +1,8 @@
 <!DOCTYPE html>
-<html lang="it" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrati - Il Paiolo</title>
-    <link rel="stylesheet" th:href="@{/css/home.css}">
-</head>
+<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{componenti :: head('Registrati - Il Paiolo')}"></head>
 <body>
-    <header class="site-header">
-        <nav class="navbar" aria-label="Navigazione principale">
-            <a class="brand" th:href="@{/}">
-                <img class="brand-logo" th:src="@{/images/IlPaiolo_logo.png}" alt="Logo Il Paiolo">
-                <span class="brand-name">Il Paiolo</span>
-            </a>
-
-            <div class="nav-links">
-                <a th:href="@{/prenotazioni}">Prenotazioni</a>
-                <a th:href="@{/admin/tavoli}">Tavoli</a>
-                <a th:href="@{/eventi}">Eventi</a>
-                <a th:href="@{/giochi}">Giochi</a>
-            </div>
-
-            <div class="nav-auth">
-                <a class="login-button" th:href="@{/login}">Accedi</a>
-            </div>
-        </nav>
-    </header>
+    <header th:replace="~{componenti :: siteHeader(@{/login}, 'Accedi')}"></header>
 
     <main>
         <section class="auth-shell" aria-labelledby="register-title">
@@ -75,7 +52,7 @@
                 </div>
 
                 <p class="auth-switch">
-                    Hai gia un account?
+                    Hai gia' un account?
                     <a class="text-link" th:href="@{/login}">Accedi</a>
                 </p>
             </form>

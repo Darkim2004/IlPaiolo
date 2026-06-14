@@ -1,64 +1,69 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Modifica prenotazione</title>
-</head>
+<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{componenti :: head('Modifica prenotazione - Il Paiolo')}"></head>
 <body>
+    <header th:replace="~{componenti :: siteHeader(@{/login}, 'Login')}"></header>
 
-<nav>
-    <a th:href="@{/}">Home</a>
-    <a th:href ="@{/admin/tavoli}">Tavoli</a>
-    <a th:href="@{/eventi}">Eventi</a>
-    <a th:href="@{/giochi}">Giochi</a>
-</nav>
+    <main>
+        <section class="page-hero" aria-labelledby="modifica-prenotazione-title">
+            <div>
+                <p class="eyebrow">Prenotazioni</p>
+                <h1 id="modifica-prenotazione-title">Modifica prenotazione</h1>
+                <p class="intro">Aggiorna orario, numero di persone o note per il tavolo gia' prenotato.</p>
+            </div>
+        </section>
 
+        <form class="game-form event-panel"
+              th:action="@{/prenotazioni/{id}/modifica(id=${prenotazione.id})}"
+              method="post">
+            <input th:replace="~{componenti :: csrfInput}">
 
-<hr>
+            <div class="summary-grid form-field-wide">
+                <div>
+                    <span class="detail-label">Tavolo attuale</span>
+                    <strong>
+                        Tavolo <span th:text="${prenotazione.tavolo.numero}">1</span>
+                        <span th:if="${prenotazione.tavolo.nome != null and !#strings.isEmpty(prenotazione.tavolo.nome)}" th:text="' - ' + ${prenotazione.tavolo.nome}"> - Sala</span>
+                    </strong>
+                </div>
+                <div>
+                    <span class="detail-label">Capienza</span>
+                    <strong th:text="|${prenotazione.tavolo.capienza} posti|">4 posti</strong>
+                </div>
+            </div>
 
-<h1>Modifica prenotazione</h1>
+            <div class="form-grid">
+                <div class="form-field">
+                    <label for="data">Data</label>
+                    <input id="data" type="date" name="data" th:value="${prenotazione.data}" required>
+                </div>
 
-<form th:action="@{/prenotazioni/{id}/modifica(id=${prenotazione.id})}" method="post">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <div class="form-field">
+                    <label for="oraInizio">Ora inizio</label>
+                    <input id="oraInizio" type="time" name="oraInizio" th:value="${prenotazione.oraInizio}" required>
+                </div>
 
-    <p>
-        <label>Data<br>
-            <input type="date" name="data" th:value="${prenotazione.data}" required>
-        </label>
-    </p>
-    <p>
-        <label>Ora inizio<br>
-            <input type="time" name="oraInizio" th:value="${prenotazione.oraInizio}" required>
-        </label>
-    </p>
-    <p>
-        <label>Ora fine<br>
-            <input type="time" name="oraFine" th:value="${prenotazione.oraFine}" required>
-        </label>
-    </p>
-    <p>
-        <label>Numero persone<br>
-            <input type="number" name="numeroPersone" min="1"
-                   th:value="${prenotazione.numeroPersone}" required>
-        </label>
-    </p>
-    <p>
-        <label>Note<br>
-            <textarea name="note" rows="3" th:text="${prenotazione.note}"></textarea>
-        </label>
-    </p>
+                <div class="form-field">
+                    <label for="oraFine">Ora fine</label>
+                    <input id="oraFine" type="time" name="oraFine" th:value="${prenotazione.oraFine}" required>
+                </div>
 
-    <p>
-        Tavolo attuale:
-        <strong th:text="'Tavolo ' + ${prenotazione.tavolo.numero}"></strong>
-        <span th:if="${prenotazione.tavolo.nome != null}"
-              th:text="' · ' + ${prenotazione.tavolo.nome}"></span>
-        · <span th:text="${prenotazione.tavolo.capienza}"></span> posti
-    </p>
+                <div class="form-field">
+                    <label for="numeroPersone">Numero persone</label>
+                    <input id="numeroPersone" type="number" name="numeroPersone" min="1" th:value="${prenotazione.numeroPersone}" required>
+                </div>
 
-    <button type="submit">Salva modifiche</button>
-    <a href="/prenotazioni/mie">Annulla</a>
-</form>
+                <div class="form-field form-field-wide">
+                    <label for="note">Note</label>
+                    <textarea id="note" name="note" rows="3" th:text="${prenotazione.note}"></textarea>
+                </div>
+            </div>
 
+            <div class="form-actions">
+                <button class="primary-button" type="submit">Salva modifiche</button>
+                <a class="ghost-button" th:href="@{/prenotazioni/mie}">Annulla</a>
+            </div>
+        </form>
+    </main>
 </body>
 </html>
