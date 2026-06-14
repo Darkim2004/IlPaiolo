@@ -36,6 +36,18 @@
 
     <a sec:authorize="hasRole('ADMIN')"
        th:href="@{/eventi/{id}/iscrizioni(id=${evento.id})}">Gestisci iscrizioni</a>
+
+    <form sec:authorize="hasRole('ADMIN')"
+          th:action="@{/admin/eventi/{id}/stato(id=${evento.id})}"
+          method="post">
+        <select name="stato">
+            <option value="APERTO" th:selected="${evento.stato.name() == 'APERTO'}">Aperto</option>
+            <option value="CHIUSO" th:selected="${evento.stato.name() == 'CHIUSO'}">Chiuso</option>
+            <option value="ANNULLATO" th:selected="${evento.stato.name() == 'ANNULLATO'}">Annullato</option>
+            <option value="COMPLETATO" th:selected="${evento.stato.name() == 'COMPLETATO'}">Completato</option>
+        </select>
+        <button type="submit">Cambia stato</button>
+    </form>
 </div>
 
 </body>
