@@ -26,7 +26,7 @@ public class TavoloController {
 
     @GetMapping
     public String lista(Model model){
-        model.addAttribute("tavoli", tavoloService.findAll());
+        model.addAttribute("tavoli", tavoloService.findAllWithPrenotazioni());
         return "admin/tavoli/lista";
     }
 

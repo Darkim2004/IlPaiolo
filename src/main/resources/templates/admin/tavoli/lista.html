@@ -36,6 +36,7 @@
         <th>Disponibile</th>
         <th>Attivo</th>
         <th>Azioni</th>
+        <th>Prenotazioni</th>
     </tr>
     </thead>
     <tbody>
@@ -76,6 +77,7 @@
                 </button>
             </form>
         </td>
+        <td th:text="${t.prenotazioni.size()}"></td>
     </tr>
     </tbody>
 </table>

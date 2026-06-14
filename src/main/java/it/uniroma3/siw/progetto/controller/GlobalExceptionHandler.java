@@ -44,12 +44,12 @@ public class GlobalExceptionHandler {
      * incompatibile con l'operazione richiesta.
      *
      * IllegalArgumentException: i dati forniti dall'utente non sono validi
-     * (es. ora di fine precedente all'ora di inizio, data passata,
+     * (es. Ora di fine precedente all'ora di inizio, data passata,
      * numero di persone superiore alla capienza del tavolo).
      *
      * IllegalStateException: i dati sono formalmente validi ma il sistema
      * non può eseguire l'operazione nello stato attuale
-     * (es. tavolo già prenotato in quella fascia oraria, tavolo disattivato).
+     * (es. Tavolo già prenotato in quella fascia oraria, tavolo disattivato).
      *
      * Entrambe restituiscono la pagina 400 con il messaggio dell'eccezione.
      */

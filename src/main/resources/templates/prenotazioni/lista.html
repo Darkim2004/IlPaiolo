@@ -64,6 +64,7 @@
             <th>Orario</th>
             <th>Persone</th>
             <th>Note</th>
+            <th>Azioni</th>
         </tr>
         </thead>
         <tbody>
@@ -74,8 +75,19 @@
             <td th:text="${p.oraInizio + ' – ' + p.oraFine}"></td>
             <td th:text="${p.numeroPersone}"></td>
             <td th:text="${p.note != null ? p.note : '-'}"></td>
+            <td>
+                <form th:action="@{/prenotazioni/admin/{id}/elimina(id=${p.id})}"
+                      method="post" style="display:inline">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                    <button type="submit"
+                            onclick="return confirm('Vuoi eliminare questa prenotazione?')">
+                        Elimina
+                    </button>
+                </form>
+            </td>
         </tr>
         </tbody>
+
     </table>
 </div>
 

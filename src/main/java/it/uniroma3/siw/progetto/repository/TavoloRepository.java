@@ -33,4 +33,7 @@ public interface TavoloRepository extends JpaRepository<Tavolo, Long> {
             @Param("oraFine")LocalTime oraFine,
             @Param("numeroPersone")int numeroPersone
     );
+
+    @Query("SELECT t FROM Tavolo t LEFT JOIN FETCH t.prenotazioni")
+    List<Tavolo> findAllWithPrenotazioni();
 }

@@ -146,4 +146,12 @@ public class PrenotazioneController {
         redirectAttributes.addFlashAttribute("successo", "Prenotazione annullata.");
         return "redirect:/prenotazioni/mie";
     }
+
+    @PostMapping("/admin/{id}/elimina")
+    public String eliminaAdmin(@PathVariable Long id,
+                               RedirectAttributes redirectAttributes) {
+        prenotazioneService.eliminaAdmin(id);
+        redirectAttributes.addFlashAttribute("successo", "Prenotazione eliminata.");
+        return "redirect:/prenotazioni/mie";
+    }
 }

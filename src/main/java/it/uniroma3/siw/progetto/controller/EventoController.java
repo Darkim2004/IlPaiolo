@@ -30,12 +30,12 @@ public class EventoController {
 
     @GetMapping("/eventi")
     public String listaEventi(Model model, Principal principal) {
-    model.addAttribute("eventi", eventoService.getEventiAperti());
-    if (principal != null) {
-        model.addAttribute("iscrizioniUtente", eventoService.getEventiIscrittoByEmail(principal.getName()));
+        model.addAttribute("eventi", eventoService.getEventiAperti());
+        if (principal != null) {
+            model.addAttribute("iscrizioniUtente", eventoService.getEventiIscrittoByEmail(principal.getName()));
+        }
+        return "eventi/lista";
     }
-    return "eventi/lista";
-}
 
     @GetMapping("/eventi/{id}")
     public String dettaglioEvento(@PathVariable Long id, Model model) {

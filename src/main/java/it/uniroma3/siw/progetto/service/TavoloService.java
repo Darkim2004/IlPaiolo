@@ -36,6 +36,11 @@ public class TavoloService {
     }
 
     @Transactional(readOnly = true)
+    public List<Tavolo> findAllWithPrenotazioni() {
+        return tavoloRepository.findAllWithPrenotazioni();
+    }
+
+    @Transactional(readOnly = true)
     public List<Tavolo> findDisponibili(LocalDate date,
                                         LocalTime oraInizio,
                                         LocalTime oraFine,

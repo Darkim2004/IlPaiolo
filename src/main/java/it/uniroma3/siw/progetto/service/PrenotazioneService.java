@@ -40,10 +40,15 @@ public class PrenotazioneService {
         return prenotazioneRepository.findByUtente(utente);
     }
 
-    // ──────────────────────────────────────────
-    // UC4 - Crea prenotazione
-    // ──────────────────────────────────────────
 
+    /**
+     *
+     * @param utente -> l'utente che vuole creare la prenotazione
+     * @param tavoloId -> su quale tavolo vuole prenotare
+     * @param dati -> i dati della prenotazione.
+     *
+     * Un utente può creare una prenotazione solo se la prenotazione è valida (vedi validaPrenotazione)
+     */
     @Transactional
     public void crea(Utente utente, Long tavoloId, Prenotazione dati) {
         Tavolo tavolo = tavoloRepository.findById(tavoloId)
@@ -56,10 +61,17 @@ public class PrenotazioneService {
         prenotazioneRepository.save(dati);
     }
 
-    // ──────────────────────────────────────────
-    // UC5 - Modifica prenotazione
-    // ──────────────────────────────────────────
-
+    /**
+     *
+     * @param prenotazioneId -> id della prenotazione da modificare
+     * @param utente -> utente che vuole modificare la propria prenotazione
+     * @param dati -> i nuovi dati della prenotazione (data, ora inizio, ora fine, numero persone, note)
+     * @return -> la prenotazione modificata
+     * Un utente può modificare le prenotazioni solo se:
+     * - è il proprietario della prenotazione (non puoi modificare una prenotazione altrui)
+     * - la prenotazione è futura (non puoi modificare una prenotazione passata o in corso)
+     * - le modifiche che vuole apportare sono valide (vedi validaPrenotazione).
+     */
     @Transactional
     public Prenotazione modifica(Long prenotazioneId, Utente utente, Prenotazione dati) {
         Prenotazione esistente = prenotazioneRepository.findById(prenotazioneId)
@@ -82,10 +94,14 @@ public class PrenotazioneService {
         return prenotazioneRepository.save(esistente);
     }
 
-    // ──────────────────────────────────────────
-    // UC6 - Elimina prenotazione
-    // ──────────────────────────────────────────
-
+    /**
+     *
+     * @param prenotazioneId -> l'id della prenotazione da eliminare
+     * @param utente -> l'utente che vuole eliminare la prenotazione
+     * NOTA: un utente USER può eliminare solo le proprie prenotazioni,
+     *      e può eliminare solamente le prenotazioni future (non puoi annullare una prenotazione passata o in corso)
+     *
+     */
     @Transactional
     public void elimina(Long prenotazioneId, Utente utente) {
         Prenotazione prenotazione = prenotazioneRepository.findById(prenotazioneId)
@@ -95,13 +111,38 @@ public class PrenotazioneService {
             throw new SecurityException("Non puoi eliminare una prenotazione altrui");
 
         if (!prenotazione.getData().isAfter(LocalDate.now()))
-            throw new IllegalStateException("Puoi annulla+re solo prenotazioni future");
+            throw new IllegalStateException("Puoi annullare solo prenotazioni future");
 
         prenotazioneRepository.delete(prenotazione);
     }
 
+    /**
+     *
+     * @param prenotazioneId -> L'id prenotazione da eliminare
+     *
+     * Un utente ADMIN può eliminare tutte le prenotazioni (presenti, passate e future) di qualsiasi utente
+     */
+    @Transactional
+    public void eliminaAdmin(Long prenotazioneId){
+        Prenotazione prenotazione = prenotazioneRepository.findById(prenotazioneId)
+                .orElseThrow(() -> new EntityNotFoundException("Prenotazione non trovata"));
+        prenotazioneRepository.delete((prenotazione));
+    }
 
 
+    /**
+     *
+     * @param tavolo -> il tavolo che vuoi prenotare
+     * @param dati -> i dati della prenotazione che vuoi creare/modificare
+     * @param escludiId -> un l'id di un tavolo che vorresti escludere dal check (per esempio se vuoi modificare un tavolo
+     *                  già esistente non devi considerare la sovrapposizione con te stesso)
+     * Una prenotazione è valida se:
+     *  - Il tavolo è sia disponibile che attivo.
+     *  - La prenotazione avviene in una data presente o futura
+     *  - L'orario di ingresso non deve essere superiore a quella dell'uscita
+     *  - Il numero di persone non deve superare la capienza del tavolo
+     *  - Non deve esistere una prenotazione sovrapposta per lo stesso tavolo (escludendo eventualmente una prenotazione già esistente se stiamo modificando una prenotazione)
+     */
     private void validaPrenotazione(Tavolo tavolo, Prenotazione dati, Long escludiId) {
         if (!tavolo.isAttivo() || !tavolo.isDisponibile())
             throw new IllegalStateException("Il tavolo non è disponibile");
