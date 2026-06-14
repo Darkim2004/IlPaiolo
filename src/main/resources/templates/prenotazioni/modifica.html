@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Modifica prenotazione</title>
+</head>
+<body>
+
+<nav>
+    <a th:href="@{/}">Home</a>
+    <a th:href ="@{/admin/tavoli}">Tavoli</a>
+    <a th:href="@{/eventi}">Eventi</a>
+    <a th:href="@{/giochi}">Giochi</a>
+</nav>
+
+
+<hr>
+
+<h1>Modifica prenotazione</h1>
+
+<form th:action="@{/prenotazioni/{id}/modifica(id=${prenotazione.id})}" method="post">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+    <p>
+        <label>Data<br>
+            <input type="date" name="data" th:value="${prenotazione.data}" required>
+        </label>
+    </p>
+    <p>
+        <label>Ora inizio<br>
+            <input type="time" name="oraInizio" th:value="${prenotazione.oraInizio}" required>
+        </label>
+    </p>
+    <p>
+        <label>Ora fine<br>
+            <input type="time" name="oraFine" th:value="${prenotazione.oraFine}" required>
+        </label>
+    </p>
+    <p>
+        <label>Numero persone<br>
+            <input type="number" name="numeroPersone" min="1"
+                   th:value="${prenotazione.numeroPersone}" required>
+        </label>
+    </p>
+    <p>
+        <label>Note<br>
+            <textarea name="note" rows="3" th:text="${prenotazione.note}"></textarea>
+        </label>
+    </p>
+
+    <p>
+        Tavolo attuale:
+        <strong th:text="'Tavolo ' + ${prenotazione.tavolo.numero}"></strong>
+        <span th:if="${prenotazione.tavolo.nome != null}"
+              th:text="' · ' + ${prenotazione.tavolo.nome}"></span>
+        · <span th:text="${prenotazione.tavolo.capienza}"></span> posti
+    </p>
+
+    <button type="submit">Salva modifiche</button>
+    <a href="/prenotazioni/mie">Annulla</a>
+</form>
+
+</body>
+</html>

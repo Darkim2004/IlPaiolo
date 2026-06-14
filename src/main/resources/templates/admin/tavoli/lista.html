@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestione tavoli</title>
+</head>
+<body>
+
+<nav>
+    <a th:href="@{/}">Home</a>
+    <a th:href ="@{/prenotazioni}">Prenotazioni</a>
+    <a th:href="@{/eventi}">Eventi</a>
+    <a th:href="@{/giochi}">Giochi</a>
+</nav>
+
+<hr>
+
+<h1>Gestione tavoli</h1>
+
+<p th:if="${successo}" th:text="${successo}"></p>
+<p th:if="${errore}" th:text="${errore}"></p>
+
+<a href="/admin/tavoli/nuovo">+ Nuovo tavolo</a>
+
+<hr>
+
+<p th:if="${#lists.isEmpty(tavoli)}">Nessun tavolo presente.</p>
+
+<table th:unless="${#lists.isEmpty(tavoli)}">
+    <thead>
+    <tr>
+        <th>Numero</th>
+        <th>Nome</th>
+        <th>Capienza</th>
+        <th>Posizione</th>
+        <th>Disponibile</th>
+        <th>Attivo</th>
+        <th>Azioni</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="t : ${tavoli}">
+        <td th:text="${t.numero}"></td>
+        <td th:text="${t.nome != null ? t.nome : '-'}"></td>
+        <td th:text="${t.capienza}"></td>
+        <td th:text="${t.posizione}"></td>
+        <td th:text="${t.disponibile ? 'Sì' : 'No'}"></td>
+        <td th:text="${t.attivo ? 'Sì' : 'No'}"></td>
+        <td>
+            <a th:href="@{/admin/tavoli/{id}/modifica(id=${t.id})}">Modifica</a>
+
+            <form th:if="${t.attivo}"
+                  th:action="@{/admin/tavoli/{id}/disattiva(id=${t.id})}"
+                  method="post" style="display:inline">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <button type="submit" onclick="return confirm('Vuoi disattivare questo tavolo?')">
+                    Disattiva
+                </button>
+            </form>
+
+            <form th:unless="${t.attivo}"
+                  th:action="@{/admin/tavoli/{id}/attiva(id=${t.id})}"
+                  method="post" style="display:inline">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <button type="submit" onclick="return confirm('Vuoi riattivare questo tavolo?')">
+                    Attiva
+                </button>
+            </form>
+
+            <form th:action="@{/admin/tavoli/{id}/elimina(id=${t.id})}"
+                  method="post" style="display:inline">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <button type="submit"
+                        onclick="return confirm('Vuoi eliminare questo tavolo?')">
+                    Elimina
+                </button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

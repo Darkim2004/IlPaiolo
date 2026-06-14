@@ -52,8 +52,6 @@ public class TavoloService {
     /**
      * @param id
      * Disattiva un tavolo rendendolo non più disponibile per future prenotazioni.
-     * @Darkim2004
-     * TODO: metto disattiva e non cancella perché se un tavolo è stato prenotato in passato, non voglio cancellarlo dal database, ma solo renderlo non più disponibile per future prenotazioni. secondo te ci sta?
      */
     @Transactional
     public void disattiva(Long id) {
@@ -80,5 +78,15 @@ public class TavoloService {
             }
             return false;
         }).orElse(false);
+    }
+
+
+    @Transactional
+    public void attiva(Long id) {
+        tavoloRepository.findById(id).ifPresent(t -> {
+            t.setAttivo(true);
+            t.setDisponibile(true);
+            tavoloRepository.save(t);
+        });
     }
 }
